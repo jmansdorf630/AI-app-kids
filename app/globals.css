@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --quest-primary: #6366f1;
+  --quest-secondary: #8b5cf6;
+  --quest-accent: #f59e0b;
+  --quest-success: #22c55e;
+  --quest-flame: #f97316;
+}
+
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  @apply bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen text-gray-800;
+}
+
+/* Kid-friendly tap targets */
+button, a[role="button"], [data-choice] {
+  @apply touch-manipulation;
+}
