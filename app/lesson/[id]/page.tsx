@@ -123,7 +123,7 @@ export default function LessonPage() {
       </div>
       <ProgressBar value={progressPct} />
       <div className="rounded-2xl border-2 border-indigo-100 bg-white p-6">
-        <StepRenderer step={step} onComplete={handleStepComplete} />
+        <StepRenderer key={step.id} step={step} onComplete={handleStepComplete} />
       </div>
     </div>
   );
