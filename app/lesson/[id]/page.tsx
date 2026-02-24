@@ -1,14 +1,25 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import confetti from "canvas-confetti";
 import { getLessonById, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
-import { loadProgress, saveProgress, completeLesson, getIsLessonUnlocked, addSkillXp } from "@/lib/progress";
-import { streakMultiplier } from "@/types";
+import {
+  loadProgress,
+  saveProgress,
+  completeLesson,
+  getIsLessonUnlocked,
+  addSkillXp,
+  updateWeeklyGoalOnLessonComplete,
+  setLastLessonRun,
+} from "@/lib/progress";
+import { initSfx, playSfx } from "@/lib/sfx";
+import { vibrate } from "@/lib/haptics";
+import { streakMultiplier, levelFromXp } from "@/types";
 import type { ProgressState } from "@/types";
 import type { Step } from "@/types";
+import type { SkillTag } from "@/types";
 import { StepRenderer } from "@/components/StepRenderer";
 import { ProgressBar } from "@/components/ProgressBar";
 
@@ -19,15 +30,14 @@ function fireConfetti() {
 
 export default function LessonPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
   const lesson = getLessonById(id);
 
   const [progress, setProgress] = useState<ProgressState | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [xpEarned, setXpEarned] = useState(0);
-  const [xpMultiplier, setXpMultiplier] = useState(1);
+  const [skillXPEarnedBySkill, setSkillXPEarnedBySkill] = useState<Partial<Record<SkillTag, number>>>({});
 
   useEffect(() => {
     setProgress(loadProgress());
@@ -40,39 +50,95 @@ export default function LessonPage() {
 
   const handleStepComplete = useCallback(
     (correct: boolean, fastBonus?: boolean) => {
+      if (typeof window !== "undefined") {
+        initSfx(() => loadProgress().settings.soundMuted);
+        if (correct) {
+          playSfx("correct");
+          vibrate("success", loadProgress().settings.hapticsEnabled);
+        } else {
+          playSfx("wrong");
+          vibrate("error", loadProgress().settings.hapticsEnabled);
+        }
+      }
+
       const currentStep = lesson?.steps[stepIndex] as Step | undefined;
       if (correct && currentStep?.skillTag != null && currentStep?.skillXP != null && progress != null) {
-        const newState = addSkillXp(progress, currentStep.skillTag, currentStep.skillXP);
+        const xp = currentStep.skillXP;
+        setSkillXPEarnedBySkill((prev) => ({
+          ...prev,
+          [currentStep.skillTag!]: (prev[currentStep.skillTag!] ?? 0) + xp,
+        }));
+        const newState = addSkillXp(progress, currentStep.skillTag, xp);
         setProgress(newState);
         saveProgress(newState);
       }
       if (correct) setCorrectCount((c) => c + 1);
-      if (!lesson || stepIndex >= lesson.steps.length - 1) {
-        const total = lesson?.steps.length ?? 0;
+
+      if (!lesson || progress == null || stepIndex >= lesson.steps.length - 1) {
+        if (progress == null || !lesson) return;
+        const currentLesson = lesson;
+        const total = currentLesson.steps.length;
         const finalCorrect = correctCount + (correct ? 1 : 0);
         const score = total ? Math.round((finalCorrect / total) * 100) : 0;
-        const baseXp = lesson?.xpReward ?? 0;
-        const mult = progress ? streakMultiplier(progress.currentStreak) : 1;
+        const baseXp = currentLesson.xpReward ?? 0;
+        const mult = streakMultiplier(progress.currentStreak);
         const bonus = fastBonus ? 1.25 : 1;
-        const xp = Math.round(baseXp * mult * bonus);
-        setXpEarned(xp);
-        setXpMultiplier(mult);
-        setFinished(true);
-        if (progress != null) {
-          let newState = completeLesson(progress, id, score, baseXp);
-          if (fastBonus) {
-            const extra = Math.round(baseXp * (mult * 0.25));
-            newState = { ...newState, totalXp: newState.totalXp + extra };
-          }
-          setProgress(newState);
-          saveProgress(newState);
+        const xpEarned = Math.round(baseXp * mult * bonus);
+
+        let newState = completeLesson(progress, id, score, baseXp);
+        if (fastBonus) {
+          const extra = Math.round(baseXp * (mult * 0.25));
+          newState = { ...newState, totalXp: newState.totalXp + extra };
         }
-        fireConfetti();
+
+        const badgesAwarded = newState.badges
+          .filter((b) => b.earnedAt && !progress.badges.find((p) => p.id === b.id)?.earnedAt)
+          .map((b) => b.id);
+
+        const levelBefore = levelFromXp(progress.totalXp);
+        const levelAfter = levelFromXp(newState.totalXp);
+        const leveledUp = levelAfter > levelBefore;
+
+        const { state: stateWithWeekly, weeklyGoalJustCompleted } = updateWeeklyGoalOnLessonComplete(
+          newState,
+          id,
+          xpEarned
+        );
+        if (weeklyGoalJustCompleted) {
+          if (typeof window !== "undefined") {
+            playSfx("complete");
+            fireConfetti();
+          }
+        }
+
+        const finalSkillXP = { ...skillXPEarnedBySkill };
+        if (correct && currentStep?.skillTag != null && currentStep?.skillXP != null) {
+          finalSkillXP[currentStep.skillTag] = (finalSkillXP[currentStep.skillTag] ?? 0) + currentStep.skillXP;
+        }
+        newState = setLastLessonRun(stateWithWeekly, {
+          lessonId: id,
+          xpEarned,
+          skillXPEarnedBySkill: finalSkillXP,
+          badgesAwarded,
+          leveledUp,
+          newLevel: levelFromXp(stateWithWeekly.totalXp),
+        });
+
+        setProgress(newState);
+        saveProgress(newState);
+
+        if (typeof window !== "undefined") {
+          playSfx("complete");
+          if (leveledUp) playSfx("levelup");
+          fireConfetti();
+        }
+
+        router.push(`/lesson/${id}/complete`);
       } else {
         setStepIndex((i) => i + 1);
       }
     },
-    [lesson, stepIndex, correctCount, id, progress]
+    [lesson, stepIndex, correctCount, id, progress, skillXPEarnedBySkill, router]
   );
 
   if (lesson == null) {
@@ -93,34 +159,6 @@ export default function LessonPage() {
         <Link href="/learn" className="text-indigo-600 font-semibold underline mt-2 inline-block">
           Back to Learn
         </Link>
-      </div>
-    );
-  }
-
-  if (finished) {
-    const total = lesson.steps.length;
-    const finalCorrect = correctCount;
-    const score = total ? Math.round((finalCorrect / total) * 100) : 0;
-
-    return (
-      <div className="space-y-6 text-center">
-        <div className="text-5xl">🎉</div>
-        <h1 className="text-2xl font-bold text-gray-800">Lesson complete!</h1>
-        <p className="text-lg">
-          Score: <strong>{score}%</strong>
-        </p>
-        <p className="text-amber-700 font-bold text-lg">+{xpEarned} XP</p>
-        {xpMultiplier > 1 && (
-          <p className="text-sm text-indigo-600">🔥 Streak bonus: {xpMultiplier}x</p>
-        )}
-        <div className="flex gap-3 justify-center">
-          <Link href="/" className="py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">
-            Home
-          </Link>
-          <Link href="/learn" className="py-3 px-6 rounded-xl border-2 border-indigo-300 text-indigo-700 font-bold">
-            Lesson map
-          </Link>
-        </div>
       </div>
     );
   }

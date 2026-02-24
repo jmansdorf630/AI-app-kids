@@ -22,6 +22,8 @@ export const lessons: Lesson[] = [
         { id: "c", text: "Other computers only", correct: false, explain: "People design and train AI systems." },
       ]},
     ],
+    summaryTakeaways: ["AI means Artificial Intelligence.", "Computers learn from examples people give them.", "AI finds patterns to do smart tasks."],
+    skillFocus: [{ skill: "ai_understanding", label: "AI Understanding" }],
   },
   {
     id: "2-what-is-llm",
@@ -44,6 +46,8 @@ export const lessons: Lesson[] = [
         { id: "c", text: "Play video games", correct: false, explain: "Their main job is language." },
       ]},
     ],
+    summaryTakeaways: ["LLM = Large Language Model.", "LLMs read and write text.", "They learn from lots of books and writing."],
+    skillFocus: [{ skill: "ai_understanding", label: "AI Understanding" }],
   },
   {
     id: "3-tokens-prompts",
@@ -65,6 +69,8 @@ export const lessons: Lesson[] = [
         { left: "Token", right: "A small piece of text the AI uses" },
       ]},
     ],
+    summaryTakeaways: ["A prompt is what you type to the AI.", "Tokens are small pieces of text the AI uses.", "Clear prompts get better answers."],
+    skillFocus: [{ skill: "prompting", label: "Prompting" }],
   },
   {
     id: "4-hallucinations",
@@ -89,6 +95,8 @@ export const lessons: Lesson[] = [
         { id: "c", text: "Dogs see in full color", correct: true, explain: "Dogs see fewer colors than we do. That's the mistake!" },
       ]},
     ],
+    summaryTakeaways: ["AI can make up wrong facts — that's a hallucination.", "Always double-check important facts.", "Spotting mistakes helps you stay accurate."],
+    skillFocus: [{ skill: "hallucination_detection", label: "Hallucination Detection" }],
   },
   {
     id: "5-bias-fairness",
@@ -111,6 +119,8 @@ export const lessons: Lesson[] = [
         "AI helps everyone equally",
       ]},
     ],
+    summaryTakeaways: ["Bias means unfair treatment.", "AI can repeat unfair ideas from data.", "We want AI to be fair to everyone."],
+    skillFocus: [{ skill: "bias", label: "Bias & Fairness" }],
   },
   {
     id: "6-safety",
@@ -132,6 +142,8 @@ export const lessons: Lesson[] = [
         { left: "Your school name", right: "Better not to share" },
       ]},
     ],
+    summaryTakeaways: ["Keep your name, address, and school private.", "Ask an adult if something feels weird.", "Stay safe like with strangers."],
+    skillFocus: [{ skill: "safety", label: "Safety" }],
   },
   {
     id: "7-ai-for-school",
@@ -178,6 +190,8 @@ export const lessons: Lesson[] = [
         { id: "c", text: "Never use AI again", correct: false, explain: "Using it wisely is great." },
       ]},
     ],
+    summaryTakeaways: ["Clear prompts get better answers.", "Say what you want, how long, and who it's for.", "You're ready for Explorer lessons!"],
+    skillFocus: [{ skill: "prompting", label: "Prompting" }],
   },
   // --- EXPLORER TIER ---
   {
@@ -193,6 +207,8 @@ export const lessons: Lesson[] = [
       { id: "s3", type: "next_word_prediction", sentence: "In winter, we wear a warm ____.", options: ["hat", "swimsuit", "sandals"], correctIndex: 0 },
       { id: "s4", type: "next_word_prediction", sentence: "To make a sandwich, you need bread and ____.", options: ["water", "butter", "pencil"], correctIndex: 1 },
     ],
+    summaryTakeaways: ["LLMs predict the next word like autocomplete.", "They use patterns from lots of text.", "That's how AI writes sentences."],
+    skillFocus: [{ skill: "ai_understanding", label: "AI Understanding" }],
   },
   {
     id: "10-training-data-matters",
@@ -206,6 +222,8 @@ export const lessons: Lesson[] = [
       { id: "s2", type: "scenario", story: "A school only had old science books that said \"Pluto is a planet.\" They trained an AI helper on those books. When a student asked how many planets there are, the AI said 9.", question: "What's the problem?", options: ["The AI is too slow", "The AI learned from outdated info and gave a wrong answer", "The student asked a bad question"], correctIndex: 1, explanation: "The AI only knew what was in the old books. Scientists later said Pluto is a dwarf planet. Training data matters!" },
       { id: "s3", type: "detect_risk", aiAnswer: "You should always share your full name and address with any app so it can help you better. The more personal info you give, the smarter the AI gets.", question: "What's wrong with this AI answer?", options: ["Hallucination", "Unsafe advice", "Bias"], correctIndex: 1, explanation: "Telling kids to share personal info with any app is unsafe. We should keep private info private." },
     ],
+    summaryTakeaways: ["Data shapes what AI knows.", "Outdated or bad data can make AI wrong.", "Unsafe advice is a risk to spot."],
+    skillFocus: [{ skill: "safety", label: "Safety" }, { skill: "bias", label: "Bias & Fairness" }],
   },
   {
     id: "11-ai-vs-google",
@@ -227,6 +245,8 @@ export const lessons: Lesson[] = [
         { id: "c", text: "Neither", correct: false, explain: "AI can help explain." },
       ], timerSeconds: 15 },
     ],
+    summaryTakeaways: ["Search finds real web pages; AI invents answers.", "Use search for current facts.", "Use AI to explain ideas simply."],
+    skillFocus: [{ skill: "ai_understanding", label: "AI Understanding" }],
   },
   // --- MASTER TIER ---
   {
@@ -241,6 +261,8 @@ export const lessons: Lesson[] = [
       { id: "s2", type: "scenario", story: "Your friend sends you a video of a famous singer saying something mean. It looks real, but you're not sure. What should you do?", question: "What's the best move?", options: ["Share it with everyone", "Believe it and get angry", "Don't share it; check if it's real or ask an adult"], correctIndex: 2, explanation: "Videos can be faked. Don't spread something that might be a deepfake. Check first or ask for help." },
       { id: "s3", type: "scenario", story: "You see a photo online of a politician at a party. The caption says it's from last week. You've learned that AI can make fake images.", question: "What should you remember?", options: ["Photos are always true", "Photos and videos can be faked; don't trust everything", "Only videos can be faked"], correctIndex: 1, explanation: "Both photos and videos can be faked by AI. Think before you trust or share." },
     ],
+    summaryTakeaways: ["Deepfakes are AI-made fake videos or images.", "Don't believe or share everything you see.", "Check with an adult if you're not sure."],
+    skillFocus: [{ skill: "safety", label: "Safety" }],
   },
 ];
 

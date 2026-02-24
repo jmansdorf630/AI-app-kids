@@ -130,7 +130,11 @@ export interface Lesson {
   xpReward: number;
   steps: Step[];
   badgeId?: string;
-  badgeOnCompletion?: string; // alias for badgeId
+  badgeOnCompletion?: string;
+  /** 2–5 bullets shown on lesson complete summary */
+  summaryTakeaways?: string[];
+  /** Skills this lesson focuses on (for summary) */
+  skillFocus?: Array<{ skill: SkillTag; label: string }>;
 }
 
 // Progress & gamification
@@ -173,6 +177,29 @@ export interface Badge {
   earnedAt: string | null;
 }
 
+export interface ProgressSettings {
+  soundMuted: boolean;
+  hapticsEnabled: boolean;
+}
+
+export interface WeeklyGoalState {
+  weekStartISO: string;
+  targetLessons: number;
+  completedLessons: number;
+  completedLessonIdsThisWeek: string[];
+  bonusXP: number;
+  bonusAwarded: boolean;
+}
+
+export interface LastLessonRun {
+  lessonId: string;
+  xpEarned: number;
+  skillXPEarnedBySkill: Partial<Record<SkillTag, number>>;
+  badgesAwarded: BadgeId[];
+  leveledUp: boolean;
+  newLevel: number;
+}
+
 export interface ProgressState {
   lessons: Record<string, LessonProgress>;
   totalXp: number;
@@ -182,6 +209,9 @@ export interface ProgressState {
   badges: Badge[];
   skills: SkillScores;
   lastDailyChallengeDate: string | null;
+  settings: ProgressSettings;
+  weeklyGoal: WeeklyGoalState;
+  lastLessonRun: LastLessonRun | null;
 }
 
 export const DEFAULT_BADGES: Badge[] = [
@@ -208,6 +238,19 @@ export function xpProgressInLevel(totalXp: number): number {
   const need = levelEnd - levelStart;
   const have = totalXp - levelStart;
   return need > 0 ? (have / need) * 100 : 0;
+}
+
+export const DEFAULT_SETTINGS: ProgressSettings = {
+  soundMuted: false,
+  hapticsEnabled: true,
+};
+
+export function getWeekStartISO(date: Date = new Date()): string {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff);
+  return d.toISOString().slice(0, 10);
 }
 
 // Streak XP multiplier

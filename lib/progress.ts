@@ -1,13 +1,25 @@
 "use client";
 
-import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier } from "@/types";
-import { DEFAULT_BADGES, DEFAULT_SKILLS, streakMultiplier } from "@/types";
+import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun } from "@/types";
+import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, streakMultiplier, getWeekStartISO } from "@/types";
 
 const STORAGE_KEY = "ai-quest-progress";
 const MASTER_TIER_XP_THRESHOLD = 300;
+const DEFAULT_WEEKLY_BONUS_XP = 30;
 
 function getTodayDateString(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+function createDefaultWeeklyGoal(): ProgressState["weeklyGoal"] {
+  return {
+    weekStartISO: getWeekStartISO(),
+    targetLessons: 3,
+    completedLessons: 0,
+    completedLessonIdsThisWeek: [],
+    bonusXP: DEFAULT_WEEKLY_BONUS_XP,
+    bonusAwarded: false,
+  };
 }
 
 function createDefaultState(): ProgressState {
@@ -20,12 +32,22 @@ function createDefaultState(): ProgressState {
     badges: JSON.parse(JSON.stringify(DEFAULT_BADGES)),
     skills: { ...DEFAULT_SKILLS },
     lastDailyChallengeDate: null,
+    settings: { ...DEFAULT_SETTINGS },
+    weeklyGoal: createDefaultWeeklyGoal(),
+    lastLessonRun: null,
   };
 }
 
 function migrateState(parsed: ProgressState): ProgressState {
   if (!parsed.skills) parsed.skills = { ...DEFAULT_SKILLS };
   if (parsed.lastDailyChallengeDate === undefined) parsed.lastDailyChallengeDate = null;
+  if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
+  if (!parsed.weeklyGoal) parsed.weeklyGoal = createDefaultWeeklyGoal();
+  if (getWeekStartISO() !== parsed.weeklyGoal.weekStartISO) {
+    parsed.weeklyGoal = createDefaultWeeklyGoal();
+  }
+  if (parsed.lastLessonRun === undefined) parsed.lastLessonRun = null;
+  if (!parsed.weeklyGoal.completedLessonIdsThisWeek) parsed.weeklyGoal.completedLessonIdsThisWeek = [];
   return parsed;
 }
 
@@ -35,10 +57,13 @@ export function loadProgress(): ProgressState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return createDefaultState();
     const parsed = JSON.parse(raw) as ProgressState;
+    const oldWeek = parsed.weeklyGoal?.weekStartISO;
     if (!parsed.badges || !Array.isArray(parsed.badges)) {
       parsed.badges = JSON.parse(JSON.stringify(DEFAULT_BADGES));
     }
-    return migrateState(parsed);
+    const state = migrateState(parsed);
+    if (oldWeek && getWeekStartISO() !== oldWeek) saveProgress(state);
+    return state;
   } catch {
     return createDefaultState();
   }
@@ -205,4 +230,59 @@ export function resetProgress(): ProgressState {
   const fresh = createDefaultState();
   if (typeof window !== "undefined") saveProgress(fresh);
   return fresh;
+}
+
+/** Update weekly goal when a lesson is completed; award bonus if target met. Returns new state. */
+export function updateWeeklyGoalOnLessonComplete(
+  state: ProgressState,
+  lessonId: string,
+  xpEarned: number
+): { state: ProgressState; weeklyGoalJustCompleted: boolean } {
+  const now = new Date();
+  const weekStart = getWeekStartISO(now);
+  let weeklyGoal = { ...state.weeklyGoal };
+
+  if (weeklyGoal.weekStartISO !== weekStart) {
+    weeklyGoal = createDefaultWeeklyGoal();
+  }
+
+  if (weeklyGoal.completedLessonIdsThisWeek.includes(lessonId)) {
+    return { state: { ...state, weeklyGoal }, weeklyGoalJustCompleted: false };
+  }
+
+  weeklyGoal = {
+    ...weeklyGoal,
+    completedLessonIdsThisWeek: [...weeklyGoal.completedLessonIdsThisWeek, lessonId],
+    completedLessons: weeklyGoal.completedLessons + 1,
+  };
+
+  let newState: ProgressState = { ...state, weeklyGoal };
+  let weeklyGoalJustCompleted = false;
+
+  if (weeklyGoal.completedLessons >= weeklyGoal.targetLessons && !weeklyGoal.bonusAwarded) {
+    weeklyGoal = { ...weeklyGoal, bonusAwarded: true };
+    newState = {
+      ...newState,
+      weeklyGoal,
+      totalXp: newState.totalXp + weeklyGoal.bonusXP,
+    };
+    weeklyGoalJustCompleted = true;
+  } else {
+    newState = { ...newState, weeklyGoal };
+  }
+
+  return { state: newState, weeklyGoalJustCompleted };
+}
+
+export function setLastLessonRun(state: ProgressState, run: LastLessonRun): ProgressState {
+  return { ...state, lastLessonRun: run };
+}
+
+export function updateSettings(state: ProgressState, settings: Partial<ProgressState["settings"]>): ProgressState {
+  return { ...state, settings: { ...state.settings, ...settings } };
+}
+
+export function setWeeklyGoalTarget(state: ProgressState, targetLessons: number): ProgressState {
+  const weeklyGoal = { ...state.weeklyGoal, targetLessons };
+  return { ...state, weeklyGoal };
 }

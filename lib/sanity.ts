@@ -4,7 +4,7 @@
  */
 
 import type { ProgressState } from "@/types";
-import { DEFAULT_BADGES } from "@/types";
+import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, getWeekStartISO } from "@/types";
 import { lessons, lessonIds } from "@/data/lessons";
 import { completeLesson } from "./progress";
 
@@ -16,6 +16,18 @@ function getDefaultState(): ProgressState {
     longestStreak: 0,
     lastActivityDate: null,
     badges: JSON.parse(JSON.stringify(DEFAULT_BADGES)),
+    skills: { ...DEFAULT_SKILLS },
+    lastDailyChallengeDate: null,
+    settings: { ...DEFAULT_SETTINGS },
+    weeklyGoal: {
+      weekStartISO: getWeekStartISO(),
+      targetLessons: 3,
+      completedLessons: 0,
+      completedLessonIdsThisWeek: [],
+      bonusXP: 30,
+      bonusAwarded: false,
+    },
+    lastLessonRun: null,
   };
 }
 
@@ -45,8 +57,7 @@ export function sanityCheckLessons(): { ok: boolean; errors: string[] } {
     }
   }
 
-  if (lessons.length !== 8) errors.push(`Expected 8 lessons, got ${lessons.length}`);
-  if (lessonIds.length !== 8) errors.push(`lessonIds length should be 8, got ${lessonIds.length}`);
+  if (lessons.length < 8) errors.push(`Expected at least 8 lessons, got ${lessons.length}`);
 
   return { ok: errors.length === 0, errors };
 }

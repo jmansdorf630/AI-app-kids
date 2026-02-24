@@ -27,6 +27,10 @@ export default function HomePage() {
   const level = levelFromXp(progress.totalXp);
   const levelProgress = xpProgressInLevel(progress.totalXp);
 
+  const weekly = progress.weeklyGoal;
+  const weeklyProgress = Math.min(weekly.completedLessons, weekly.targetLessons);
+  const weeklyTarget = weekly.targetLessons;
+
   const orderedIds = [...beginnerIds, ...explorerIds, ...masterIds];
   const nextLesson = orderedIds
     .map((id) => lessons.find((l) => l.id === id))
@@ -48,6 +52,17 @@ export default function HomePage() {
 
       <ProgressBar value={levelProgress} label={`Level ${level} → ${level + 1}`} />
       <ProgressBar value={progressPct} label="Course progress" />
+
+      <div className="rounded-2xl border-2 border-amber-100 bg-amber-50/50 p-4">
+        <h2 className="font-bold text-gray-800 mb-1">📅 Weekly goal</h2>
+        <p className="text-sm text-gray-600 mb-2">
+          {weeklyProgress}/{weeklyTarget} lessons this week
+          {!weekly.bonusAwarded && weeklyTarget > 0 && (
+            <span className="ml-1 font-medium text-amber-700"> · +{weekly.bonusXP} XP when complete</span>
+          )}
+        </p>
+        <ProgressBar value={weeklyTarget ? (weeklyProgress / weeklyTarget) * 100 : 0} />
+      </div>
 
       {nextLesson && nextUnlocked && (
         <div className="rounded-2xl border-2 border-indigo-200 bg-white p-4">
