@@ -1,10 +1,34 @@
 // Lesson & step types for the lesson engine
 
-export type StepType = "info" | "mcq" | "match" | "order" | "spot";
+export type StepType =
+  | "info"
+  | "mcq"
+  | "match"
+  | "order"
+  | "spot"
+  | "build_prompt"
+  | "detect_risk"
+  | "scenario"
+  | "next_word_prediction";
+
+export type SkillTag =
+  | "prompting"
+  | "safety"
+  | "bias"
+  | "hallucination_detection"
+  | "ai_understanding";
+
+export type LessonTier = "beginner" | "explorer" | "master";
 
 export interface BaseStep {
   id: string;
   type: StepType;
+  /** Optional: which skill this step trains */
+  skillTag?: SkillTag;
+  /** XP added to that skill when answered correctly */
+  skillXP?: number;
+  /** Optional timer in seconds (for mcq, detect_risk) */
+  timerSeconds?: number;
 }
 
 export interface InfoStep extends BaseStep {
@@ -42,7 +66,7 @@ export interface MatchStep extends BaseStep {
 export interface OrderStep extends BaseStep {
   type: "order";
   instruction: string;
-  items: string[]; // correct order
+  items: string[];
 }
 
 export interface SpotStep extends BaseStep {
@@ -50,29 +74,89 @@ export interface SpotStep extends BaseStep {
   instruction: string;
   aiAnswer: string;
   question: string;
-  options: McqOption[]; // one correct = the hallucination/mistake
+  options: McqOption[];
 }
 
-export type Step = InfoStep | McqStep | MatchStep | OrderStep | SpotStep;
+export interface BuildPromptStep extends BaseStep {
+  type: "build_prompt";
+  question: string;
+  fragments: string[];
+  correctCombination: string[];
+  explanation: string;
+}
+
+export interface DetectRiskStep extends BaseStep {
+  type: "detect_risk";
+  aiAnswer: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+}
+
+export interface ScenarioStep extends BaseStep {
+  type: "scenario";
+  story: string;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+}
+
+export interface NextWordPredictionStep extends BaseStep {
+  type: "next_word_prediction";
+  sentence: string;
+  options: string[];
+  correctIndex: number;
+}
+
+export type Step =
+  | InfoStep
+  | McqStep
+  | MatchStep
+  | OrderStep
+  | SpotStep
+  | BuildPromptStep
+  | DetectRiskStep
+  | ScenarioStep
+  | NextWordPredictionStep;
 
 export interface Lesson {
   id: string;
   title: string;
   description: string;
   emoji: string;
+  tier: LessonTier;
   xpReward: number;
   steps: Step[];
-  badgeId?: string; // optional badge awarded on completion (e.g. lesson 4 = Hallucination Hunter)
+  badgeId?: string;
+  badgeOnCompletion?: string; // alias for badgeId
 }
 
 // Progress & gamification
 
 export interface LessonProgress {
   completed: boolean;
-  bestScore: number; // 0-100
-  lastCompletedDate: string | null; // ISO date
+  bestScore: number;
+  lastCompletedDate: string | null;
   xpEarned: number;
 }
+
+export interface SkillScores {
+  prompting: number;
+  safety: number;
+  bias: number;
+  hallucination_detection: number;
+  ai_understanding: number;
+}
+
+export const DEFAULT_SKILLS: SkillScores = {
+  prompting: 0,
+  safety: 0,
+  bias: 0,
+  hallucination_detection: 0,
+  ai_understanding: 0,
+};
 
 export type BadgeId =
   | "first_lesson"
@@ -86,7 +170,7 @@ export interface Badge {
   name: string;
   description: string;
   emoji: string;
-  earnedAt: string | null; // ISO date or null if not earned
+  earnedAt: string | null;
 }
 
 export interface ProgressState {
@@ -94,8 +178,10 @@ export interface ProgressState {
   totalXp: number;
   currentStreak: number;
   longestStreak: number;
-  lastActivityDate: string | null; // ISO date (last day user did a lesson)
+  lastActivityDate: string | null;
   badges: Badge[];
+  skills: SkillScores;
+  lastDailyChallengeDate: string | null;
 }
 
 export const DEFAULT_BADGES: Badge[] = [
@@ -105,3 +191,29 @@ export const DEFAULT_BADGES: Badge[] = [
   { id: "hallucination_hunter", name: "Hallucination Hunter", description: "Complete the Hallucinations lesson", emoji: "🔍", earnedAt: null },
   { id: "prompt_master", name: "Prompt Master", description: "Complete all 8 lessons", emoji: "🎓", earnedAt: null },
 ];
+
+// Level from XP: Level = floor(totalXP / 100) + 1
+export function levelFromXp(totalXp: number): number {
+  return Math.floor(totalXp / 100) + 1;
+}
+
+export function xpForNextLevel(totalXp: number): number {
+  const currentLevel = levelFromXp(totalXp);
+  return currentLevel * 100;
+}
+
+export function xpProgressInLevel(totalXp: number): number {
+  const levelStart = (levelFromXp(totalXp) - 1) * 100;
+  const levelEnd = levelFromXp(totalXp) * 100;
+  const need = levelEnd - levelStart;
+  const have = totalXp - levelStart;
+  return need > 0 ? (have / need) * 100 : 0;
+}
+
+// Streak XP multiplier
+export function streakMultiplier(streak: number): number {
+  if (streak >= 14) return 2;
+  if (streak >= 7) return 1.5;
+  if (streak >= 3) return 1.2;
+  return 1;
+}

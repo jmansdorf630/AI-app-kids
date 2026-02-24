@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { loadProgress } from "@/lib/progress";
+import { loadProgress, getIsLessonUnlocked } from "@/lib/progress";
 import type { ProgressState } from "@/types";
-import { lessons, lessonIds } from "@/data/lessons";
-import { isLessonUnlocked } from "@/lib/progress";
+import { levelFromXp, xpProgressInLevel } from "@/types";
+import { lessons, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
 import { ProgressBar } from "@/components/ProgressBar";
 import { XPChip } from "@/components/XPChip";
 import { StreakFlame } from "@/components/StreakFlame";
@@ -24,10 +24,16 @@ export default function HomePage() {
   const completedCount = Object.values(progress.lessons).filter((l) => l.completed).length;
   const totalLessons = lessons.length;
   const progressPct = totalLessons ? (completedCount / totalLessons) * 100 : 0;
+  const level = levelFromXp(progress.totalXp);
+  const levelProgress = xpProgressInLevel(progress.totalXp);
 
-  const nextLessonIndex = lessonIds.findIndex((id) => !progress.lessons[id]?.completed);
-  const nextLesson = nextLessonIndex >= 0 ? lessons[nextLessonIndex] : null;
-  const nextUnlocked = nextLesson ? isLessonUnlocked(lessonIds, nextLessonIndex, progress) : false;
+  const orderedIds = [...beginnerIds, ...explorerIds, ...masterIds];
+  const nextLesson = orderedIds
+    .map((id) => lessons.find((l) => l.id === id))
+    .find((l) => l && !progress.lessons[l.id]?.completed);
+  const nextUnlocked =
+    nextLesson &&
+    getIsLessonUnlocked(nextLesson.id, nextLesson.tier, progress, beginnerIds, explorerIds, masterIds);
 
   return (
     <div className="space-y-6">
@@ -37,8 +43,10 @@ export default function HomePage() {
       <div className="flex flex-wrap gap-3 items-center">
         <XPChip xp={progress.totalXp} />
         <StreakFlame streak={progress.currentStreak} />
+        <span className="font-bold text-indigo-600">Level {level}</span>
       </div>
 
+      <ProgressBar value={levelProgress} label={`Level ${level} → ${level + 1}`} />
       <ProgressBar value={progressPct} label="Course progress" />
 
       {nextLesson && nextUnlocked && (
@@ -58,7 +66,7 @@ export default function HomePage() {
 
       {nextLesson && !nextUnlocked && (
         <div className="rounded-2xl border-2 border-amber-200 bg-amber-50 p-4">
-          <p className="font-semibold text-amber-800">Complete the previous lesson first to unlock the next one!</p>
+          <p className="font-semibold text-amber-800">Complete the previous lesson or reach the next tier to unlock!</p>
           <Link href="/learn" className="text-indigo-600 font-semibold underline mt-2 inline-block">
             Go to Learn →
           </Link>
@@ -67,18 +75,21 @@ export default function HomePage() {
 
       {!nextLesson && (
         <div className="rounded-2xl border-2 border-green-200 bg-green-50 p-4">
-          <p className="font-bold text-green-800">🎉 You finished all lessons! Review anytime from Learn.</p>
+          <p className="font-bold text-green-800">🎉 You finished all lessons! Try Daily Challenge or review from Learn.</p>
           <Link href="/learn" className="text-indigo-600 font-semibold underline mt-2 inline-block">
             View map →
           </Link>
         </div>
       )}
 
-      <div className="flex gap-3">
-        <Link href="/learn" className="flex-1 py-2 rounded-xl border-2 border-indigo-200 text-center font-semibold text-indigo-700 hover:bg-indigo-50">
+      <div className="flex flex-wrap gap-3">
+        <Link href="/learn" className="flex-1 min-w-[120px] py-2 rounded-xl border-2 border-indigo-200 text-center font-semibold text-indigo-700 hover:bg-indigo-50">
           📚 Lesson map
         </Link>
-        <Link href="/profile" className="flex-1 py-2 rounded-xl border-2 border-indigo-200 text-center font-semibold text-indigo-700 hover:bg-indigo-50">
+        <Link href="/daily" className="flex-1 min-w-[120px] py-2 rounded-xl border-2 border-amber-200 text-center font-semibold text-amber-700 hover:bg-amber-50">
+          ⚡ Daily
+        </Link>
+        <Link href="/profile" className="flex-1 min-w-[120px] py-2 rounded-xl border-2 border-indigo-200 text-center font-semibold text-indigo-700 hover:bg-indigo-50">
           👤 Profile
         </Link>
       </div>
