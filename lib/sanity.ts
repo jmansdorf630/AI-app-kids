@@ -4,7 +4,7 @@
  */
 
 import type { ProgressState } from "@/types";
-import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, getWeekStartISO } from "@/types";
+import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, DEFAULT_AVATAR_STATE, getWeekStartISO } from "@/types";
 import { lessons, lessonIds } from "@/data/lessons";
 import { completeLesson } from "./progress";
 
@@ -28,6 +28,7 @@ function getDefaultState(): ProgressState {
       bonusAwarded: false,
     },
     lastLessonRun: null,
+    avatar: { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] },
   };
 }
 

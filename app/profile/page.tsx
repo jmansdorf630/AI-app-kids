@@ -10,6 +10,7 @@ import { StreakFlame } from "@/components/StreakFlame";
 import { BadgeGrid } from "@/components/BadgeGrid";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SkillProgress } from "@/components/SkillProgress";
+import { RobotAvatar } from "@/components/RobotAvatar";
 import { lessons } from "@/data/lessons";
 
 const focusRing = "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900";
@@ -37,9 +38,32 @@ export default function ProfilePage() {
   const levelProgress = xpProgressInLevel(progress.totalXp);
   const mult = streakMultiplier(progress.currentStreak);
 
+  const avatarEquipped = progress.avatar?.equipped ?? { bodyColor: "blue", eyes: "happy", headgear: null, accessory: null, effect: null };
+  const inventoryCount = progress.avatar?.inventory?.length ?? 0;
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">👤 Profile</h1>
+
+      <section className="rounded-xl border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-800/50 p-4 flex flex-col sm:flex-row items-center gap-4">
+        <RobotAvatar equipped={avatarEquipped} size="md" />
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-gray-800 dark:text-gray-100">Your Avatar</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{inventoryCount} items in collection</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Equipped: {avatarEquipped.bodyColor}, {avatarEquipped.eyes}
+            {avatarEquipped.headgear && `, ${avatarEquipped.headgear}`}
+            {avatarEquipped.accessory && `, ${avatarEquipped.accessory}`}
+            {avatarEquipped.effect && `, ${avatarEquipped.effect}`}
+          </p>
+          <Link
+            href="/avatar"
+            className={`inline-block mt-2 px-4 py-2 rounded-xl bg-indigo-500 text-white font-semibold hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500 ${focusRing}`}
+          >
+            Customize Avatar
+          </Link>
+        </div>
+      </section>
 
       <div className="flex flex-wrap gap-4 items-center">
         <XPChip xp={progress.totalXp} />

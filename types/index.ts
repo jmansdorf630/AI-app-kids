@@ -212,6 +212,34 @@ export interface LearnUIState {
   learnTierCollapsed?: Partial<Record<LearnTierKey, boolean>>;
 }
 
+export interface AvatarEquipped {
+  bodyColor: string;
+  eyes: string;
+  headgear: string | null;
+  accessory: string | null;
+  effect: string | null;
+}
+
+export interface AvatarState {
+  equipped: AvatarEquipped;
+  inventory: string[];
+}
+
+export const DEFAULT_AVATAR_EQUIPPED: AvatarEquipped = {
+  bodyColor: "blue",
+  eyes: "happy",
+  headgear: null,
+  accessory: null,
+  effect: null,
+};
+
+export const DEFAULT_AVATAR_INVENTORY = ["color_blue", "eyes_happy"];
+
+export const DEFAULT_AVATAR_STATE: AvatarState = {
+  equipped: { ...DEFAULT_AVATAR_EQUIPPED },
+  inventory: [...DEFAULT_AVATAR_INVENTORY],
+};
+
 export interface ProgressState {
   lessons: Record<string, LessonProgress>;
   totalXp: number;
@@ -225,6 +253,7 @@ export interface ProgressState {
   weeklyGoal: WeeklyGoalState;
   lastLessonRun: LastLessonRun | null;
   ui?: LearnUIState;
+  avatar?: AvatarState;
 }
 
 export const DEFAULT_BADGES: Badge[] = [

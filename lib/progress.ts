@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun, LearnTierKey } from "@/types";
-import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, streakMultiplier, getWeekStartISO } from "@/types";
+import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, DEFAULT_AVATAR_STATE, streakMultiplier, getWeekStartISO } from "@/types";
 
 const STORAGE_KEY = "ai-quest-progress";
 const MASTER_TIER_XP_THRESHOLD = 300;
@@ -35,6 +35,7 @@ function createDefaultState(): ProgressState {
     settings: { ...DEFAULT_SETTINGS },
     weeklyGoal: createDefaultWeeklyGoal(),
     lastLessonRun: null,
+    avatar: { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] },
   };
 }
 
@@ -58,6 +59,20 @@ function migrateState(parsed: ProgressState): ProgressState {
   if (parsed.lastLessonRun === undefined) parsed.lastLessonRun = null;
   if (!parsed.weeklyGoal.completedLessonIdsThisWeek) parsed.weeklyGoal.completedLessonIdsThisWeek = [];
   if (parsed.ui === undefined) parsed.ui = {};
+  if (!parsed.avatar) {
+    parsed.avatar = { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] };
+  } else {
+    parsed.avatar = {
+      equipped: {
+        bodyColor: parsed.avatar.equipped?.bodyColor ?? DEFAULT_AVATAR_STATE.equipped.bodyColor,
+        eyes: parsed.avatar.equipped?.eyes ?? DEFAULT_AVATAR_STATE.equipped.eyes,
+        headgear: parsed.avatar.equipped?.headgear ?? null,
+        accessory: parsed.avatar.equipped?.accessory ?? null,
+        effect: parsed.avatar.equipped?.effect ?? null,
+      },
+      inventory: Array.isArray(parsed.avatar.inventory) ? parsed.avatar.inventory : [...DEFAULT_AVATAR_STATE.inventory],
+    };
+  }
   return parsed;
 }
 
