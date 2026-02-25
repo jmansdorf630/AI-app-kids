@@ -69,6 +69,15 @@ export function buyItem(progress: ProgressState, itemId: string): ProgressState 
   };
 }
 
+/** Set headgear or accessory slot to none (remove). */
+export function unequipSlot(progress: ProgressState, slot: "headgear" | "accessory"): ProgressState {
+  const avatar = progress.avatar ?? { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] };
+  const eq = { ...avatar.equipped };
+  if (slot === "headgear") eq.headgear = null;
+  else if (slot === "accessory") eq.accessory = null;
+  return { ...progress, avatar: { ...avatar, equipped: eq } };
+}
+
 /** Equip an item. Item must be owned, or be a starter default, or be earned (xpCost 0 + unlock met). */
 export function equipItem(progress: ProgressState, itemId: string): ProgressState | null {
   const item = getAvatarItemById(itemId);

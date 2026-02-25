@@ -7,6 +7,7 @@ import { initSfx, playSfx } from "@/lib/sfx";
 import {
   buyItem,
   equipItem,
+  unequipSlot,
   meetsUnlockRequirement,
   canAfford,
   ownsItem,
@@ -91,6 +92,16 @@ export default function AvatarPage() {
     setToast("Equipped!");
   };
 
+  const handleNone = (slot: "headgear" | "accessory") => {
+    if (!progress) return;
+    const next = unequipSlot(progress, slot);
+    initSfx(() => loadProgress().settings.soundMuted);
+    if (!loadProgress().settings.soundMuted) playSfx("correct");
+    saveProgress(next);
+    setProgress(next);
+    setToast("Removed!");
+  };
+
   if (progress == null) {
     return <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>;
   }
@@ -134,6 +145,75 @@ export default function AvatarPage() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
+        {/* None option for headgear and accessory */}
+        {category === "headgear" && (
+          <div
+            className={`rounded-xl border-2 p-4 ${
+              equipped.headgear === null
+                ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 dark:border-indigo-500"
+                : "border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800/50"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-slate-700/50">
+                <AvatarRenderer equipped={{ ...equipped, headgear: null }} size="sm" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-gray-800 dark:text-gray-100">None</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">No headpiece</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {equipped.headgear === null ? (
+                <span className="px-3 py-1.5 rounded-lg bg-indigo-200 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 text-sm font-semibold">
+                  Equipped
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleNone("headgear")}
+                  className={`px-3 py-1.5 rounded-lg border-2 border-indigo-300 dark:border-indigo-600 font-semibold text-sm text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 ${focusRing}`}
+                >
+                  None
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+        {category === "accessory" && (
+          <div
+            className={`rounded-xl border-2 p-4 ${
+              equipped.accessory === null
+                ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 dark:border-indigo-500"
+                : "border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800/50"
+            }`}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-slate-700/50">
+                <AvatarRenderer equipped={{ ...equipped, accessory: null }} size="sm" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-gray-800 dark:text-gray-100">None</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">No backpack or accessory</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {equipped.accessory === null ? (
+                <span className="px-3 py-1.5 rounded-lg bg-indigo-200 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 text-sm font-semibold">
+                  Equipped
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleNone("accessory")}
+                  className={`px-3 py-1.5 rounded-lg border-2 border-indigo-300 dark:border-indigo-600 font-semibold text-sm text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 ${focusRing}`}
+                >
+                  None
+                </button>
+              )}
+            </div>
+          </div>
+        )}
         {items.map((item) => {
           const owned = ownsItem(progress, item.id);
           const unlocked = meetsUnlockRequirement(progress, item);
