@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun } from "@/types";
+import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun, LearnTierKey } from "@/types";
 import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, streakMultiplier, getWeekStartISO } from "@/types";
 
 const STORAGE_KEY = "ai-quest-progress";
@@ -57,6 +57,7 @@ function migrateState(parsed: ProgressState): ProgressState {
   }
   if (parsed.lastLessonRun === undefined) parsed.lastLessonRun = null;
   if (!parsed.weeklyGoal.completedLessonIdsThisWeek) parsed.weeklyGoal.completedLessonIdsThisWeek = [];
+  if (parsed.ui === undefined) parsed.ui = {};
   return parsed;
 }
 
@@ -294,4 +295,19 @@ export function updateSettings(state: ProgressState, settings: Partial<ProgressS
 export function setWeeklyGoalTarget(state: ProgressState, targetLessons: number): ProgressState {
   const weeklyGoal = { ...state.weeklyGoal, targetLessons };
   return { ...state, weeklyGoal };
+}
+
+export function setLearnTierCollapsed(
+  state: ProgressState,
+  tier: LearnTierKey,
+  collapsed: boolean
+): ProgressState {
+  const current = state.ui?.learnTierCollapsed ?? {};
+  return {
+    ...state,
+    ui: {
+      ...state.ui,
+      learnTierCollapsed: { ...current, [tier]: collapsed },
+    },
+  };
 }

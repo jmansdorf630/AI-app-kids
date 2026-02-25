@@ -206,6 +206,12 @@ export interface LastLessonRun {
   newLevel: number;
 }
 
+export type LearnTierKey = "beginner" | "explorer" | "master";
+
+export interface LearnUIState {
+  learnTierCollapsed?: Partial<Record<LearnTierKey, boolean>>;
+}
+
 export interface ProgressState {
   lessons: Record<string, LessonProgress>;
   totalXp: number;
@@ -218,6 +224,7 @@ export interface ProgressState {
   settings: ProgressSettings;
   weeklyGoal: WeeklyGoalState;
   lastLessonRun: LastLessonRun | null;
+  ui?: LearnUIState;
 }
 
 export const DEFAULT_BADGES: Badge[] = [
