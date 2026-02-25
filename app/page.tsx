@@ -9,7 +9,7 @@ import { lessons, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
 import { ProgressBar } from "@/components/ProgressBar";
 import { XPChip } from "@/components/XPChip";
 import { StreakFlame } from "@/components/StreakFlame";
-import { RobotAvatar } from "@/components/RobotAvatar";
+import { AvatarRenderer } from "@/components/avatar/AvatarRenderer";
 
 const focusRing =
   "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900";
@@ -57,7 +57,7 @@ export default function HomePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4 flex-wrap">
-        <RobotAvatar equipped={avatarEquipped} size="sm" />
+        <AvatarRenderer equipped={avatarEquipped} size="sm" />
         <div>
           <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">Welcome to AI Quest! 🤖</h1>
           <p className="text-gray-600 dark:text-gray-300">Learn how AI and LLMs work — one short lesson at a time.</p>

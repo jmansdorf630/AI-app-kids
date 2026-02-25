@@ -33,19 +33,19 @@ export const avatarItems: AvatarItem[] = [
   { id: "eyes_star", type: "eyes", name: "Star Eyes", description: "Sparkly star eyes", xpCost: 30, rarity: "common", equipValue: "star", previewEmoji: "🌟" },
   { id: "eyes_pixel", type: "eyes", name: "Pixel", description: "Retro pixel eyes", xpCost: 35, rarity: "rare", equipValue: "pixel", previewEmoji: "👾" },
   { id: "eyes_sunglasses", type: "eyes", name: "Sunglasses", description: "Cool shades", xpCost: 50, rarity: "rare", equipValue: "sunglasses", previewEmoji: "😎" },
-  // Headgear - earned + purchase
-  { id: "headgear_graduation", type: "headgear", name: "Graduation Cap", description: "Complete Beginner to unlock", xpCost: 0, rarity: "rare", equipValue: "graduation", previewEmoji: "🎓", unlock: { kind: "complete_tier", value: "beginner" } },
+  // Headgear - earned + purchase (asset keys: grad_cap, headset, crown, rocket_helmet)
+  { id: "headgear_graduation", type: "headgear", name: "Graduation Cap", description: "Complete Beginner to unlock", xpCost: 0, rarity: "rare", equipValue: "grad_cap", previewEmoji: "🎓", unlock: { kind: "complete_tier", value: "beginner" } },
   { id: "headgear_headset", type: "headgear", name: "Headset", description: "Complete Explorer to unlock", xpCost: 0, rarity: "rare", equipValue: "headset", previewEmoji: "🎧", unlock: { kind: "complete_tier", value: "explorer" } },
   { id: "headgear_crown", type: "headgear", name: "Crown", description: "Complete Master to unlock", xpCost: 0, rarity: "epic", equipValue: "crown", previewEmoji: "👑", unlock: { kind: "complete_tier", value: "master" } },
-  { id: "headgear_rocket", type: "headgear", name: "Rocket Helmet", description: "Space-ready helmet", xpCost: 60, rarity: "rare", equipValue: "rocket", previewEmoji: "🚀" },
-  // Accessories
+  { id: "headgear_rocket", type: "headgear", name: "Rocket Helmet", description: "Space-ready helmet", xpCost: 60, rarity: "rare", equipValue: "rocket_helmet", previewEmoji: "🚀" },
+  // Accessories (asset keys: cape, backpack, jetpack)
   { id: "accessory_cape", type: "accessory", name: "Cape", description: "Hero cape", xpCost: 45, rarity: "rare", equipValue: "cape", previewEmoji: "🦸" },
   { id: "accessory_backpack", type: "accessory", name: "Backpack", description: "Adventure backpack", xpCost: 35, rarity: "common", equipValue: "backpack", previewEmoji: "🎒" },
   { id: "accessory_jetpack", type: "accessory", name: "Jetpack", description: "Jetpack for flying", xpCost: 70, rarity: "epic", equipValue: "jetpack", previewEmoji: "🚀" },
-  // Effects
-  { id: "effect_sparkle", type: "effect", name: "Sparkle", description: "Reach 300 XP to unlock", xpCost: 40, rarity: "rare", equipValue: "sparkle", previewEmoji: "✨", unlock: { kind: "min_xp", value: 300 } },
+  // Effects (asset keys: sparkles, glow, flame)
+  { id: "effect_sparkle", type: "effect", name: "Sparkles", description: "Reach 300 XP to unlock", xpCost: 40, rarity: "rare", equipValue: "sparkles", previewEmoji: "✨", unlock: { kind: "min_xp", value: 300 } },
   { id: "effect_flame", type: "effect", name: "Flame Aura", description: "7-day streak to unlock", xpCost: 50, rarity: "epic", equipValue: "flame", previewEmoji: "🔥", unlock: { kind: "streak_days", value: 7 } },
-  { id: "effect_hologram", type: "effect", name: "Hologram", description: "Reach 500 XP to unlock", xpCost: 80, rarity: "legendary", equipValue: "hologram", previewEmoji: "💫", unlock: { kind: "min_xp", value: 500 } },
+  { id: "effect_hologram", type: "effect", name: "Glow", description: "Reach 500 XP to unlock", xpCost: 80, rarity: "legendary", equipValue: "glow", previewEmoji: "💫", unlock: { kind: "min_xp", value: 500 } },
 ];
 
 export function getAvatarItemById(id: string): AvatarItem | undefined {

@@ -61,16 +61,27 @@ function migrateState(parsed: ProgressState): ProgressState {
   if (parsed.lastLessonRun === undefined) parsed.lastLessonRun = null;
   if (!parsed.weeklyGoal.completedLessonIdsThisWeek) parsed.weeklyGoal.completedLessonIdsThisWeek = [];
   if (parsed.ui === undefined) parsed.ui = {};
+  const bodyColorKeys = ["blue", "green", "purple", "gold"] as const;
+  const eyesKeys = ["happy", "star", "pixel", "sunglasses"] as const;
+  const headgearMap: Record<string, string | null> = { graduation: "grad_cap", rocket: "rocket_helmet", grad_cap: "grad_cap", headset: "headset", crown: "crown", rocket_helmet: "rocket_helmet" };
+  const effectMap: Record<string, string | null> = { sparkle: "sparkles", hologram: "glow", sparkles: "sparkles", flame: "flame", glow: "glow" };
+
   if (!parsed.avatar) {
     parsed.avatar = { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] };
   } else {
+    let h = parsed.avatar.equipped?.headgear ?? null;
+    if (h && headgearMap[h] !== undefined) h = headgearMap[h] as string | null;
+    else if (h && !["grad_cap", "headset", "crown", "rocket_helmet"].includes(h)) h = null;
+    let e = parsed.avatar.equipped?.effect ?? null;
+    if (e && effectMap[e] !== undefined) e = effectMap[e] as string | null;
+    else if (e && !["sparkles", "flame", "glow"].includes(e)) e = null;
     parsed.avatar = {
       equipped: {
-        bodyColor: parsed.avatar.equipped?.bodyColor ?? DEFAULT_AVATAR_STATE.equipped.bodyColor,
-        eyes: parsed.avatar.equipped?.eyes ?? DEFAULT_AVATAR_STATE.equipped.eyes,
-        headgear: parsed.avatar.equipped?.headgear ?? null,
+        bodyColor: bodyColorKeys.includes(parsed.avatar.equipped?.bodyColor as any) ? (parsed.avatar.equipped!.bodyColor as any) : DEFAULT_AVATAR_STATE.equipped.bodyColor,
+        eyes: eyesKeys.includes(parsed.avatar.equipped?.eyes as any) ? (parsed.avatar.equipped!.eyes as any) : DEFAULT_AVATAR_STATE.equipped.eyes,
+        headgear: h,
         accessory: parsed.avatar.equipped?.accessory ?? null,
-        effect: parsed.avatar.equipped?.effect ?? null,
+        effect: e,
       },
       inventory: Array.isArray(parsed.avatar.inventory) ? parsed.avatar.inventory : [...DEFAULT_AVATAR_STATE.inventory],
     };

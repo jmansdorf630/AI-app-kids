@@ -212,12 +212,18 @@ export interface LearnUIState {
   learnTierCollapsed?: Partial<Record<LearnTierKey, boolean>>;
 }
 
+export type BodyColorKey = "blue" | "green" | "purple" | "gold";
+export type EyesKey = "happy" | "star" | "pixel" | "sunglasses";
+export type HeadgearKey = "grad_cap" | "headset" | "crown" | "rocket_helmet";
+export type AccessoryKey = "cape" | "backpack" | "jetpack";
+export type EffectKey = "sparkles" | "glow" | "flame";
+
 export interface AvatarEquipped {
-  bodyColor: string;
-  eyes: string;
-  headgear: string | null;
-  accessory: string | null;
-  effect: string | null;
+  bodyColor: BodyColorKey;
+  eyes: EyesKey;
+  headgear: HeadgearKey | null;
+  accessory: AccessoryKey | null;
+  effect: EffectKey | null;
 }
 
 export interface AvatarState {
