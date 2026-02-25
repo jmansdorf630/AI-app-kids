@@ -5,6 +5,7 @@ import Link from "next/link";
 import confetti from "canvas-confetti";
 import { lessons } from "@/data/lessons";
 import { loadProgress, saveProgress, canAccessDailyChallenge, completeDailyChallenge } from "@/lib/progress";
+import { shouldReduceMotion } from "@/lib/accessibility";
 import type { ProgressState } from "@/types";
 import type { Step } from "@/types";
 import { StepRenderer } from "@/components/StepRenderer";
@@ -52,7 +53,7 @@ export default function DailyPage() {
         saveProgress(newState);
       }
       setFinished(true);
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+      if (!shouldReduceMotion()) confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
     } else {
       setStepIndex((i) => i + 1);
     }
@@ -65,9 +66,9 @@ export default function DailyPage() {
   if (!hasCompletedLessons) {
     return (
       <div className="space-y-4 text-center">
-        <h1 className="text-2xl font-bold text-gray-800">⚡ Daily Challenge</h1>
-        <p className="text-gray-600">Complete at least one lesson to unlock the Daily Challenge!</p>
-        <Link href="/learn" className="text-indigo-600 font-semibold underline">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">⚡ Daily Challenge</h1>
+        <p className="text-gray-600 dark:text-gray-300">Complete at least one lesson to unlock the Daily Challenge!</p>
+        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Go to Learn →
         </Link>
       </div>
@@ -77,9 +78,9 @@ export default function DailyPage() {
   if (!available && !finished) {
     return (
       <div className="space-y-4 text-center">
-        <h1 className="text-2xl font-bold text-gray-800">⚡ Daily Challenge</h1>
-        <p className="text-gray-600">You already did today&apos;s challenge. Come back tomorrow!</p>
-        <Link href="/" className="text-indigo-600 font-semibold underline">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">⚡ Daily Challenge</h1>
+        <p className="text-gray-600 dark:text-gray-300">You already did today&apos;s challenge. Come back tomorrow!</p>
+        <Link href="/" className="text-indigo-600 dark:text-indigo-400 font-semibold underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Home →
         </Link>
       </div>
@@ -92,12 +93,12 @@ export default function DailyPage() {
     return (
       <div className="space-y-6 text-center">
         <div className="text-5xl">⚡</div>
-        <h1 className="text-2xl font-bold text-gray-800">Daily Challenge complete!</h1>
-        <p className="text-lg">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Daily Challenge complete!</h1>
+        <p className="text-lg text-gray-700 dark:text-gray-200">
           {correctCount} / {total} correct
         </p>
-        <p className="text-amber-700 font-bold text-lg">+{xpEarned} XP bonus</p>
-        <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold">
+        <p className="text-amber-700 dark:text-amber-300 font-bold text-lg">+{xpEarned} XP bonus</p>
+        <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
           Home
         </Link>
       </div>
@@ -106,7 +107,7 @@ export default function DailyPage() {
 
   if (dailySteps.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-600">
+      <div className="text-center py-8 text-gray-600 dark:text-gray-300">
         No quiz steps in completed lessons. Complete more lessons with questions!
       </div>
     );
@@ -115,11 +116,11 @@ export default function DailyPage() {
   const current = dailySteps[stepIndex];
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold text-gray-800">⚡ Daily Challenge</h1>
-      <p className="text-sm text-gray-600">
+      <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">⚡ Daily Challenge</h1>
+      <p className="text-sm text-gray-600 dark:text-gray-300">
         Question {stepIndex + 1} of {dailySteps.length}
       </p>
-      <div className="rounded-2xl border-2 border-amber-200 bg-white p-6">
+      <div className="rounded-2xl border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800/50 p-6">
         <StepRenderer key={current.step.id} step={current.step} onComplete={handleStepComplete} />
       </div>
     </div>

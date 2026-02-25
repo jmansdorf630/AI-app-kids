@@ -42,6 +42,15 @@ function migrateState(parsed: ProgressState): ProgressState {
   if (!parsed.skills) parsed.skills = { ...DEFAULT_SKILLS };
   if (parsed.lastDailyChallengeDate === undefined) parsed.lastDailyChallengeDate = null;
   if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
+  else {
+    parsed.settings = {
+      ...DEFAULT_SETTINGS,
+      ...parsed.settings,
+      theme: parsed.settings.theme ?? DEFAULT_SETTINGS.theme,
+      largeText: parsed.settings.largeText ?? DEFAULT_SETTINGS.largeText,
+      reduceMotion: parsed.settings.reduceMotion !== undefined ? parsed.settings.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
+    };
+  }
   if (!parsed.weeklyGoal) parsed.weeklyGoal = createDefaultWeeklyGoal();
   if (getWeekStartISO() !== parsed.weeklyGoal.weekStartISO) {
     parsed.weeklyGoal = createDefaultWeeklyGoal();

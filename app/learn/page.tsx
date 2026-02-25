@@ -28,15 +28,15 @@ export default function LearnPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-extrabold text-gray-800">📚 Lesson map</h1>
-      <p className="text-gray-600">Complete lessons in each tier. Explorer unlocks after Beginner; Master unlocks at 300+ XP after Explorer.</p>
+      <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">📚 Lesson map</h1>
+      <p className="text-gray-600 dark:text-gray-300">Complete lessons in each tier. Explorer unlocks after Beginner; Master unlocks at 300+ XP after Explorer.</p>
 
       {TIERS.map(({ key, label, emoji }) => {
         const tierLessons = getLessonsForTier(key);
         if (tierLessons.length === 0) return null;
         return (
           <section key={key}>
-            <h2 className="font-bold text-lg text-gray-800 mb-3 flex items-center gap-2">
+            <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">
               <span>{emoji}</span> {label}
             </h2>
             <div className="space-y-3">

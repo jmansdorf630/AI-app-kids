@@ -16,6 +16,7 @@ import {
 } from "@/lib/progress";
 import { initSfx, playSfx } from "@/lib/sfx";
 import { vibrate } from "@/lib/haptics";
+import { shouldReduceMotion } from "@/lib/accessibility";
 import { streakMultiplier, levelFromXp } from "@/types";
 import type { ProgressState } from "@/types";
 import type { Step } from "@/types";
@@ -24,6 +25,7 @@ import { StepRenderer } from "@/components/StepRenderer";
 import { ProgressBar } from "@/components/ProgressBar";
 
 function fireConfetti() {
+  if (shouldReduceMotion()) return;
   confetti({ particleCount: 80, spread: 70, origin: { y: 0.7 } });
   setTimeout(() => confetti({ particleCount: 50, spread: 100, origin: { y: 0.8 } }), 200);
 }
@@ -144,8 +146,8 @@ export default function LessonPage() {
   if (lesson == null) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600">Lesson not found.</p>
-        <Link href="/learn" className="text-indigo-600 font-semibold underline mt-2 inline-block">
+        <p className="text-gray-600 dark:text-gray-300">Lesson not found.</p>
+        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Back to Learn
         </Link>
       </div>
@@ -155,8 +157,8 @@ export default function LessonPage() {
   if (progress != null && !unlocked) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600">🔒 Complete the previous lesson or reach the required tier!</p>
-        <Link href="/learn" className="text-indigo-600 font-semibold underline mt-2 inline-block">
+        <p className="text-gray-600 dark:text-gray-300">🔒 Complete the previous lesson or reach the required tier!</p>
+        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Back to Learn
         </Link>
       </div>
@@ -169,15 +171,15 @@ export default function LessonPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <Link href="/learn" className="text-indigo-600 font-semibold">
+        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ← Back
         </Link>
-        <span className="text-gray-500 font-semibold">
+        <span className="text-gray-500 dark:text-gray-400 font-semibold">
           Step {stepIndex + 1} of {lesson.steps.length}
         </span>
       </div>
       <ProgressBar value={progressPct} />
-      <div className="rounded-2xl border-2 border-indigo-100 bg-white p-6">
+      <div className="rounded-2xl border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-800/50 p-6">
         <StepRenderer key={step.id} step={step} onComplete={handleStepComplete} />
       </div>
     </div>

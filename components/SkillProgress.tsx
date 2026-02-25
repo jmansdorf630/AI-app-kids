@@ -20,7 +20,7 @@ export function SkillProgress({ skills }: { skills: SkillScores }) {
         const value = Math.min(MAX_SKILL, skills[key] ?? 0);
         return (
           <div key={key}>
-            <div className="flex justify-between text-sm font-semibold text-gray-700 mb-1">
+            <div className="flex justify-between text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
               <span>{emoji} {label}</span>
               <span>{value} / {MAX_SKILL}</span>
             </div>

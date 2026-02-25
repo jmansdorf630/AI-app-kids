@@ -177,9 +177,15 @@ export interface Badge {
   earnedAt: string | null;
 }
 
+export type ThemeMode = "light" | "dark";
+
 export interface ProgressSettings {
+  theme: ThemeMode;
   soundMuted: boolean;
   hapticsEnabled: boolean;
+  largeText: boolean;
+  /** When undefined, respect prefers-reduced-motion; when true/false, user override. */
+  reduceMotion?: boolean;
 }
 
 export interface WeeklyGoalState {
@@ -241,8 +247,11 @@ export function xpProgressInLevel(totalXp: number): number {
 }
 
 export const DEFAULT_SETTINGS: ProgressSettings = {
+  theme: "light",
   soundMuted: false,
   hapticsEnabled: true,
+  largeText: false,
+  reduceMotion: undefined, /* respect OS prefers-reduced-motion when undefined */
 };
 
 export function getWeekStartISO(date: Date = new Date()): string {

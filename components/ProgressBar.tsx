@@ -13,12 +13,12 @@ export function ProgressBar({ value, max = 100, label, className = "" }: Progres
   return (
     <div className={className}>
       {label && (
-        <div className="flex justify-between text-sm font-semibold text-gray-600 mb-1">
+        <div className="flex justify-between text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
           <span>{label}</span>
           <span>{Math.round(pct)}%</span>
         </div>
       )}
-      <div className="h-3 bg-indigo-100 rounded-full overflow-hidden">
+      <div className="h-3 bg-indigo-100 dark:bg-indigo-900/50 rounded-full overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-quest-primary to-quest-secondary rounded-full transition-all duration-500"
           style={{ width: `${pct}%` }}

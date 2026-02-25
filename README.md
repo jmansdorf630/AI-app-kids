@@ -30,12 +30,13 @@ A Duolingo-style MVP web app that teaches LLM/AI basics to kids with short lesso
 | `/learn` | Lesson map: list of lessons with lock/unlock |
 | `/lesson/[id]` | Interactive lesson runner |
 | `/lesson/[id]/complete` | Lesson complete summary (takeaways, skills, XP, badges) |
-| `/profile` | Badges, XP, streak, settings (sound, haptics), weekly goal |
+| `/profile` | Badges, XP, streak, Settings (theme, accessibility), link to Sound & weekly goal |
+| `/settings` | Sound, haptics, weekly goal target |
 | `/admin/content` | Dev: view/edit lesson JSON, export/import |
 
 ## Gamification
 
-- **XP**: 10–30 per lesson; confetti on completion.
+- **XP**: 10–30 per lesson; confetti on completion (unless Reduce motion is on).
 - **Streak**: Completing at least one lesson per calendar day increments the streak (🔥); 3/7/14-day streaks give XP multipliers.
 - **Weekly goal**: Complete N lessons per week (default 3) for bonus XP (default 30). Target is configurable in Profile (3, 5, or 7 lessons).
 - **Badges**: First lesson, 3-day streak, 100 XP, Hallucination Hunter (lesson 4), Prompt Master (all 8 lessons).
@@ -73,27 +74,50 @@ See existing lessons in **`/data/kids/lessons.ts`** for the exact shape. Each le
   - `completeLesson()`, `updateWeeklyGoalOnLessonComplete()`, `setLastLessonRun()`
   - `updateSettings()`, `setWeeklyGoalTarget()`, `resetProgress()`
 - Progress is stored in `localStorage` under `ai-quest-progress`, including:
-  - `settings.soundMuted`, `settings.hapticsEnabled`
+  - `settings.theme` ("light" | "dark"), `settings.soundMuted`, `settings.hapticsEnabled`, `settings.largeText`, `settings.reduceMotion`
   - `weeklyGoal` (week start, target lessons, completed count, bonus awarded)
   - `lastLessonRun` (for the lesson-complete summary screen)
-- Migration: missing `settings`, `weeklyGoal`, or `lastLessonRun` are initialized with defaults; if the calendar week changes, the weekly goal resets and is persisted on next load.
+- Migration: missing `settings` (or any key) and `weeklyGoal` / `lastLessonRun` are initialized with defaults; if the calendar week changes, the weekly goal resets and is persisted on next load.
 
 ## Sound effects
 
 - **`/lib/sfx.ts`**: `initSfx(getMuted)`, `playSfx(name)`, `setMuted()`, `getMuted()`.
 - **Where to add sound files**: Place short MP3s in **`/public/sfx/`**: `click.mp3`, `correct.mp3`, `wrong.mp3`, `levelup.mp3`, `complete.mp3`. See `/public/sfx/README.md`. If files are missing, the app runs without sound.
-- **Mute**: Toggle in the top nav (🔊/🔇) and in Profile → Settings. Persisted as `progress.settings.soundMuted`.
+- **Mute**: Toggle in **Settings** (`/settings`). Persisted as `progress.settings.soundMuted`.
 - **iOS**: Audio is initialized on first user interaction (e.g. first tap) to respect autoplay rules.
 
 ## Haptic feedback
 
 - **`/lib/haptics.ts`**: `canVibrate()`, `vibrate(type: "light" | "success" | "error")`. Uses `navigator.vibrate` where available.
-- **Toggle**: Profile → Settings → Haptic feedback. Persisted as `progress.settings.hapticsEnabled` (default true).
+- **Toggle**: Settings (`/settings`) → Haptic feedback. Persisted as `progress.settings.hapticsEnabled` (default true).
 - **When**: Success vibration on correct answer; error vibration on wrong answer.
 
 ## Weekly goal
 
-- **Edit target**: Profile → Weekly goal → choose 3, 5, or 7 lessons per week. Persisted in `progress.weeklyGoal.targetLessons`. Bonus XP default is 30 (see `DEFAULT_WEEKLY_BONUS_XP` in `lib/progress.ts`).
+- **Edit target**: Settings (`/settings`) → Weekly goal → choose 3, 5, or 7 lessons per week. Persisted in `progress.weeklyGoal.targetLessons`. Bonus XP default is 30 (see `DEFAULT_WEEKLY_BONUS_XP` in `lib/progress.ts`).
+
+## Dark mode
+
+- **Toggle**: **Profile** page only → Settings section → Theme (☀️ Light / 🌙 Dark). Not in the top navigation.
+- **How it works**: Tailwind class-based dark mode. `lib/theme.ts` exposes `getTheme()`, `setTheme(theme)`, `initTheme()`. On load, `ThemeAndAccessibilityInit` runs `initTheme()` which reads `progress.settings.theme` and applies the `dark` class to `<html>`.
+- **Design**: Soft navy/indigo background (`from-slate-900 via-indigo-950/30`), not pure black. All main components use `dark:` variants for contrast.
+- **Where to edit palette**: `app/globals.css` (`.dark body`), and any component’s `dark:` Tailwind classes. Theme colors are in `tailwind.config.ts` (`quest`).
+
+## Accessibility
+
+- **Where**: All controls are in **Profile** → Settings section (theme, larger text, reduce motion). Sound/haptics/weekly goal are in **Settings** (`/settings`).
+- **Larger text**: `progress.settings.largeText`. When on, adds class `large-text` to `<html>` and increases base font size (see `globals.css`).
+- **Reduce motion**: `progress.settings.reduceMotion`. When on (or when OS “Reduce motion” is preferred and not overridden), adds class `reduce-motion` to `<html>`. Confetti and animated transitions are disabled; `lib/accessibility.ts` exports `shouldReduceMotion()`.
+- **Keyboard & focus**: Buttons and links use `focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2` (and `dark:focus:ring-offset-slate-900`). Semantic `<button>` and `<a>` throughout.
+- **Init**: `lib/accessibility.ts` has `initAccessibility()` and `applyAccessibilitySettings()`; called from `ThemeAndAccessibilityInit` in the root layout.
+
+## PWA & offline
+
+- **Manifest**: `public/manifest.json` — name, short_name, start_url `/`, display `standalone`, theme_color, background_color, icons (192×192, 512×512). Linked from root layout metadata.
+- **Icons**: Add `public/icons/icon-192.png` and `public/icons/icon-512.png` (see `public/icons/README.md`). App works without them; install may use a default icon.
+- **Service worker**: `public/sw.js` — cache-first for main routes and `/_next/` static assets. Registered client-side only in `ThemeAndAccessibilityInit` (no SSR). Success is logged in the dev console.
+- **How to test PWA locally**: Run `npm run build && npm run start`, then open the app in Chrome. DevTools → Application → Manifest / Service Workers. Use “Add to home screen” or the install prompt.
+- **How to simulate offline**: DevTools → Network → set throttling to “Offline”. Reload; the app should show the “Offline Mode” banner and still load cached pages and lessons.
 
 ## Sanity checks
 
@@ -106,12 +130,12 @@ You can run them from the browser console (e.g. in a dev-only page) or from a sm
 
 ## Files (overview)
 
-- **App**: `app/layout.tsx`, `app/globals.css`, `app/page.tsx`, `app/learn/page.tsx`, `app/lesson/[id]/page.tsx`, `app/lesson/[id]/complete/page.tsx`, `app/profile/page.tsx`, `app/daily/page.tsx`, `app/admin/content/page.tsx`
-- **Components**: `Nav.tsx`, `ProgressBar.tsx`, `XPChip.tsx`, `StreakFlame.tsx`, `BadgeGrid.tsx`, `LessonCard.tsx`, `StepRenderer.tsx`, `LessonCompleteSummary.tsx`, `SkillProgress.tsx`
-- **Types**: `types/index.ts` — Lesson, Step, ProgressState, ProgressSettings, WeeklyGoalState, LastLessonRun, Badge
+- **App**: `app/layout.tsx`, `app/globals.css`, `app/page.tsx`, `app/learn/page.tsx`, `app/lesson/[id]/page.tsx`, `app/lesson/[id]/complete/page.tsx`, `app/profile/page.tsx`, `app/settings/page.tsx`, `app/daily/page.tsx`, `app/admin/content/page.tsx`
+- **Components**: `Nav.tsx`, `ProgressBar.tsx`, `XPChip.tsx`, `StreakFlame.tsx`, `BadgeGrid.tsx`, `LessonCard.tsx`, `StepRenderer.tsx`, `LessonCompleteSummary.tsx`, `SkillProgress.tsx`, `ThemeAndAccessibilityInit.tsx`, `OfflineBanner.tsx`
+- **Types**: `types/index.ts` — Lesson, Step, ProgressState, ProgressSettings (theme, largeText, reduceMotion), WeeklyGoalState, LastLessonRun, Badge, ThemeMode
 - **Data**: `data/lessons.ts` (re-exports), `data/kids/lessons.ts` — 12 lessons with tiers, `summaryTakeaways`, `skillFocus`
-- **Lib**: `lib/progress.ts`, `lib/sfx.ts`, `lib/haptics.ts`, `lib/sanity.ts`
-- **Public**: `public/sfx/README.md` — add `click.mp3`, `correct.mp3`, `wrong.mp3`, `levelup.mp3`, `complete.mp3` for sound
+- **Lib**: `lib/progress.ts`, `lib/sfx.ts`, `lib/haptics.ts`, `lib/theme.ts`, `lib/accessibility.ts`, `lib/sanity.ts`
+- **Public**: `public/sfx/README.md`, `public/manifest.json`, `public/sw.js`, `public/icons/README.md` (add icon-192.png, icon-512.png for PWA)
 
 ## TODOs for later
 

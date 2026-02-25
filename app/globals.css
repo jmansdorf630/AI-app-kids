@@ -17,7 +17,40 @@ body {
   @apply bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen text-gray-800;
 }
 
+.dark body {
+  @apply bg-gradient-to-b from-slate-900 via-indigo-950/30 to-slate-900 text-gray-100;
+}
+
+/* Larger text mode (Profile → Settings) */
+html.large-text {
+  font-size: 18px;
+}
+html.large-text body {
+  @apply text-lg;
+}
+
+/* Reduce motion: disable animations when class is on html */
+html.reduce-motion *,
+html.reduce-motion *::before,
+html.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 /* Kid-friendly tap targets */
 button, a[role="button"], [data-choice] {
   @apply touch-manipulation;
+}
+
+/* Focus ring for accessibility */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
+}
+.dark button:focus-visible,
+.dark a:focus-visible,
+.dark [role="button"]:focus-visible {
+  @apply ring-offset-slate-900;
 }
