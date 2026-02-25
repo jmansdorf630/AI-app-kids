@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { loadProgress, updateSettings, setWeeklyGoalTarget, saveProgress } from "@/lib/progress";
-import type { ProgressState } from "@/types";
+import { setTheme } from "@/lib/theme";
+import { applyAccessibilitySettings } from "@/lib/accessibility";
+import type { ProgressState, ThemeMode } from "@/types";
 import { initSfx } from "@/lib/sfx";
 
 export default function SettingsPage() {
@@ -12,6 +14,30 @@ export default function SettingsPage() {
   useEffect(() => {
     setProgress(loadProgress());
   }, []);
+
+  const handleThemeChange = (theme: ThemeMode) => {
+    if (!progress) return;
+    const next = updateSettings(progress, { theme });
+    saveProgress(next);
+    setProgress(next);
+    setTheme(theme);
+  };
+
+  const handleLargeTextToggle = () => {
+    if (!progress) return;
+    const next = updateSettings(progress, { largeText: !progress.settings.largeText });
+    saveProgress(next);
+    setProgress(next);
+    applyAccessibilitySettings();
+  };
+
+  const handleReduceMotionToggle = () => {
+    if (!progress) return;
+    const next = updateSettings(progress, { reduceMotion: !progress.settings.reduceMotion });
+    saveProgress(next);
+    setProgress(next);
+    applyAccessibilitySettings();
+  };
 
   const handleSoundToggle = () => {
     if (!progress) return;
@@ -46,19 +72,61 @@ export default function SettingsPage() {
       <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">⚙️ Settings</h1>
 
       <section>
+        <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">🌓 Theme & accessibility</h2>
+        <div className="space-y-4 rounded-xl border-2 border-indigo-100 dark:border-indigo-800 bg-white dark:bg-slate-800/50 p-4">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-gray-700 dark:text-gray-200">Theme</span>
+            <div className="flex gap-1">
+              {(["light", "dark"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => handleThemeChange(t)}
+                  className={`px-3 py-1 rounded-lg border-2 font-medium ${focusRing} ${progress.settings.theme === t ? "border-indigo-500 bg-indigo-100 dark:bg-indigo-900/50 dark:border-indigo-400 text-indigo-800 dark:text-indigo-100" : "border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-200"}`}
+                >
+                  {t === "light" ? "☀️ Light" : "🌙 Dark"}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-700 dark:text-gray-200">Larger text</span>
+            <button
+              type="button"
+              onClick={handleLargeTextToggle}
+              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-600 font-medium text-gray-800 dark:text-gray-100 ${focusRing} ${progress.settings.largeText ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 dark:border-indigo-500" : ""}`}
+            >
+              {progress.settings.largeText ? "On" : "Off"}
+            </button>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-700 dark:text-gray-200">Reduce motion</span>
+            <button
+              type="button"
+              onClick={handleReduceMotionToggle}
+              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-600 font-medium text-gray-800 dark:text-gray-100 ${focusRing} ${progress.settings.reduceMotion ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 dark:border-indigo-500" : ""}`}
+            >
+              {progress.settings.reduceMotion ? "On" : "Off"}
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-300">When Off, system preference may still apply.</p>
+        </div>
+      </section>
+
+      <section>
         <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">🔊 Sound & volume</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-700 dark:text-gray-300">Sound effects</span>
+            <span className="text-gray-700 dark:text-gray-200">Sound effects</span>
             <button
               type="button"
               onClick={handleSoundToggle}
-              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-700 font-medium ${focusRing}`}
+              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-600 font-medium text-gray-800 dark:text-gray-100 ${focusRing}`}
             >
               {progress.settings.soundMuted ? "🔇 Off" : "🔊 On"}
             </button>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-gray-300">
             Clicks, correct/wrong, level-up, and lesson complete. Muted = no sounds.
           </p>
         </div>
@@ -68,16 +136,16 @@ export default function SettingsPage() {
         <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">📳 Haptic feedback</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-700 dark:text-gray-300">Vibration (mobile)</span>
+            <span className="text-gray-700 dark:text-gray-200">Vibration (mobile)</span>
             <button
               type="button"
               onClick={handleHapticsToggle}
-              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-700 font-medium ${focusRing}`}
+              className={`px-3 py-1 rounded-lg border-2 border-indigo-200 dark:border-indigo-600 font-medium text-gray-800 dark:text-gray-100 ${focusRing}`}
             >
               {progress.settings.hapticsEnabled ? "On" : "Off"}
             </button>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-500 dark:text-gray-300">
             Light vibration on correct/incorrect answers when supported.
           </p>
         </div>
@@ -85,8 +153,8 @@ export default function SettingsPage() {
 
       <section>
         <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">📅 Weekly goal</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-          Complete <strong>{progress.weeklyGoal.targetLessons}</strong> lessons this week for +{progress.weeklyGoal.bonusXP} XP bonus.
+        <p className="text-sm text-gray-600 dark:text-gray-200 mb-2">
+          Complete <strong className="dark:text-gray-100">{progress.weeklyGoal.targetLessons}</strong> lessons this week for +<strong className="dark:text-gray-100">{progress.weeklyGoal.bonusXP}</strong> XP bonus.
         </p>
         <div className="flex gap-2">
           {[3, 5, 7].map((t) => (
@@ -94,7 +162,7 @@ export default function SettingsPage() {
               key={t}
               type="button"
               onClick={() => handleWeeklyTarget(t)}
-              className={`px-3 py-1 rounded-lg border-2 font-medium ${focusRing} ${progress.weeklyGoal.targetLessons === t ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/50 dark:border-indigo-400" : "border-gray-200 dark:border-slate-600"}`}
+              className={`px-3 py-1 rounded-lg border-2 font-medium text-gray-800 dark:text-gray-100 ${focusRing} ${progress.weeklyGoal.targetLessons === t ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/50 dark:border-indigo-400" : "border-gray-200 dark:border-slate-600 dark:text-gray-200"}`}
             >
               {t} lessons
             </button>
@@ -102,7 +170,7 @@ export default function SettingsPage() {
         </div>
       </section>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      <p className="text-sm text-gray-500 dark:text-gray-300">
         <Link href="/profile" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ← Back to Profile
         </Link>
