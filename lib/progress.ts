@@ -1,6 +1,6 @@
 "use client";
 
-import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun, LearnTierKey } from "@/types";
+import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, LastLessonRun, LearnTierKey, HeadgearKey, EffectKey } from "@/types";
 import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, DEFAULT_AVATAR_STATE, streakMultiplier, getWeekStartISO } from "@/types";
 
 const STORAGE_KEY = "ai-quest-progress";
@@ -70,10 +70,10 @@ function migrateState(parsed: ProgressState): ProgressState {
     parsed.avatar = { equipped: { ...DEFAULT_AVATAR_STATE.equipped }, inventory: [...DEFAULT_AVATAR_STATE.inventory] };
   } else {
     let h = parsed.avatar.equipped?.headgear ?? null;
-    if (h && headgearMap[h] !== undefined) h = headgearMap[h] as string | null;
+    if (h && headgearMap[h] !== undefined) h = headgearMap[h] as HeadgearKey | null;
     else if (h && !["grad_cap", "headset", "crown", "rocket_helmet"].includes(h)) h = null;
     let e = parsed.avatar.equipped?.effect ?? null;
-    if (e && effectMap[e] !== undefined) e = effectMap[e] as string | null;
+    if (e && effectMap[e] !== undefined) e = effectMap[e] as EffectKey | null;
     else if (e && !["sparkles", "flame", "glow"].includes(e)) e = null;
     parsed.avatar = {
       equipped: {
