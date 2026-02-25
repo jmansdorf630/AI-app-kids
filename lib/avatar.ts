@@ -1,4 +1,4 @@
-import type { ProgressState, AvatarEquipped } from "@/types";
+import type { ProgressState, AvatarEquipped, BodyColorKey, EyesKey, HeadgearKey, AccessoryKey, EffectKey } from "@/types";
 import { DEFAULT_AVATAR_STATE } from "@/types";
 import type { LearnTierKey } from "@/types";
 import { beginnerIds, explorerIds, masterIds } from "@/data/lessons";
@@ -84,19 +84,19 @@ export function equipItem(progress: ProgressState, itemId: string): ProgressStat
 
   switch (item.type) {
     case "color":
-      eq.bodyColor = item.equipValue;
+      eq.bodyColor = item.equipValue as BodyColorKey;
       break;
     case "eyes":
-      eq.eyes = item.equipValue;
+      eq.eyes = item.equipValue as EyesKey;
       break;
     case "headgear":
-      eq.headgear = item.equipValue;
+      eq.headgear = item.equipValue as HeadgearKey | null;
       break;
     case "accessory":
-      eq.accessory = item.equipValue;
+      eq.accessory = item.equipValue as AccessoryKey | null;
       break;
     case "effect":
-      eq.effect = item.equipValue;
+      eq.effect = item.equipValue as EffectKey | null;
       break;
     default:
       return null;
