@@ -4,6 +4,8 @@ import type { ProgressState, LessonProgress, BadgeId, SkillTag, LessonTier, Last
 import { DEFAULT_BADGES, DEFAULT_SKILLS, DEFAULT_SETTINGS, DEFAULT_AVATAR_STATE, streakMultiplier, getWeekStartISO } from "@/types";
 
 const STORAGE_KEY = "ai-quest-progress";
+export const ADMIN_KEY = "ai-quest-admin";
+const MAX_ADMIN_XP = 99_999;
 const MASTER_TIER_XP_THRESHOLD = 300;
 const DEFAULT_WEEKLY_BONUS_XP = 30;
 
@@ -86,7 +88,10 @@ export function loadProgress(): ProgressState {
     if (!parsed.badges || !Array.isArray(parsed.badges)) {
       parsed.badges = JSON.parse(JSON.stringify(DEFAULT_BADGES));
     }
-    const state = migrateState(parsed);
+    let state = migrateState(parsed);
+    if (typeof window !== "undefined" && localStorage.getItem(ADMIN_KEY) === "1") {
+      state = { ...state, totalXp: MAX_ADMIN_XP, currentStreak: Math.max(state.currentStreak, 7) };
+    }
     if (oldWeek && getWeekStartISO() !== oldWeek) saveProgress(state);
     return state;
   } catch {
@@ -94,10 +99,25 @@ export function loadProgress(): ProgressState {
   }
 }
 
+export function isAdminMode(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(ADMIN_KEY) === "1";
+}
+
+export function setAdminMode(on: boolean): void {
+  if (typeof window === "undefined") return;
+  if (on) localStorage.setItem(ADMIN_KEY, "1");
+  else localStorage.removeItem(ADMIN_KEY);
+}
+
 export function saveProgress(state: ProgressState): void {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    let toSave = state;
+    if (localStorage.getItem(ADMIN_KEY) === "1") {
+      toSave = { ...state, totalXp: MAX_ADMIN_XP, currentStreak: Math.max(state.currentStreak, 7) };
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch {
     // ignore
   }

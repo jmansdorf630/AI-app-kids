@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { lessons } from "@/data/lessons";
+import { isAdminMode, setAdminMode } from "@/lib/progress";
 
 export default function AdminContentPage() {
   const [jsonText, setJsonText] = useState(() => JSON.stringify(lessons, null, 2));
   const [error, setError] = useState<string | null>(null);
+  const [adminOn, setAdminOn] = useState(false);
+
+  useEffect(() => {
+    setAdminOn(isAdminMode());
+  }, []);
 
   const validate = useCallback(() => {
     try {
@@ -52,11 +58,34 @@ export default function AdminContentPage() {
     setError(null);
   };
 
+  const handleAdminToggle = () => {
+    const next = !adminOn;
+    setAdminMode(next);
+    setAdminOn(next);
+  };
+
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-gray-800">🛠 Admin – Lesson content</h1>
-      <p className="text-sm text-gray-600">
-        View and edit lesson JSON. Export to download, or upload a JSON file to import. Changes here are for export only — the app still uses the code in <code className="bg-gray-200 px-1 rounded">/data/lessons.ts</code>.
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">🛠 Admin – Lesson content</h1>
+
+      <section className="rounded-xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20 p-4">
+        <h2 className="font-bold text-gray-800 dark:text-gray-100 mb-2">Admin privileges</h2>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={adminOn}
+            onChange={handleAdminToggle}
+            className="w-4 h-4 rounded border-2 border-indigo-500 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          />
+          <span className="text-gray-800 dark:text-gray-200 font-medium">Unlimited XP (unlock all avatar items)</span>
+        </label>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          When on: 99,999 XP and all avatar shop items show as unlockable. Go to Avatar or Home to see it.
+        </p>
+      </section>
+
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        View and edit lesson JSON. Export to download, or upload a JSON file to import. Changes here are for export only — the app still uses the code in <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">/data/lessons.ts</code>.
       </p>
 
       {error && (

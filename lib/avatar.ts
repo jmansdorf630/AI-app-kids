@@ -2,6 +2,7 @@ import type { ProgressState, AvatarEquipped } from "@/types";
 import { DEFAULT_AVATAR_STATE } from "@/types";
 import type { LearnTierKey } from "@/types";
 import { beginnerIds, explorerIds, masterIds } from "@/data/lessons";
+import { ADMIN_KEY } from "./progress";
 import { getAvatarItemById, type AvatarItem, type TierValue } from "@/data/avatarItems";
 
 function getTierIds(tier: LearnTierKey): string[] {
@@ -17,6 +18,7 @@ export function isTierComplete(progress: ProgressState, tier: LearnTierKey): boo
 }
 
 export function meetsUnlockRequirement(progress: ProgressState, item: AvatarItem): boolean {
+  if (typeof window !== "undefined" && localStorage.getItem(ADMIN_KEY) === "1") return true;
   const u = item.unlock;
   if (!u || u.kind === "none") return true;
   if (u.kind === "complete_tier") {
