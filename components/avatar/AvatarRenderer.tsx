@@ -47,10 +47,26 @@ export function AvatarRenderer({ equipped, size = "md", className = "" }: Avatar
       viewBox={VIEWBOX}
       width={px}
       height={px}
-      className={className}
+      className={`avatar-stage ${className}`}
       role="img"
       aria-label="Robot avatar"
     >
+      <defs>
+        {/* Spotlight: light center behind head, fades outward */}
+        <radialGradient id="avatar-spotlight" cx="50%" cy="35%" r="75%">
+          <stop offset="0%" stopColor="#f8fafc" stopOpacity={0.5} />
+          <stop offset="50%" stopColor="#e2e8f0" stopOpacity={0.25} />
+          <stop offset="100%" stopColor="#cbd5e1" stopOpacity={0} />
+        </radialGradient>
+      </defs>
+
+      {/* Backdrop: radial gradient "stage" */}
+      <circle cx={100} cy={100} r={95} fill="url(#avatar-spotlight)" />
+      <circle cx={100} cy={100} r={95} fill="none" stroke="rgba(148,163,184,0.2)" strokeWidth={1} />
+
+      {/* Soft ground shadow ellipse beneath robot */}
+      <ellipse cx={100} cy={158} rx={38} ry={8} fill="rgba(0,0,0,0.12)" />
+
       {/* 1) Effect behind */}
       {eq.effect && <EffectLayer effect={eq.effect} variant="back" />}
 

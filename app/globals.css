@@ -54,3 +54,20 @@ a:focus-visible,
 .dark [role="button"]:focus-visible {
   @apply ring-offset-slate-900;
 }
+
+/* Avatar stage: subtle idle float (disabled when reduce-motion) */
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.avatar-stage {
+  animation: avatar-float 2.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .avatar-stage {
+    animation: none;
+  }
+}
+html.reduce-motion .avatar-stage {
+  animation: none;
+}
