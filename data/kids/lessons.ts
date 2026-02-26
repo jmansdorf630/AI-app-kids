@@ -10,7 +10,7 @@ export const lessons: Lesson[] = [
     xpReward: 15,
     steps: [
       { id: "s1", type: "info", title: "Meet AI!", text: "AI stands for Artificial Intelligence. It's when a computer can do things that seem smart — like answering questions or recognizing pictures.", emoji: "🤖" },
-      { id: "s2", type: "info", title: "Not Magic", text: "AI is made by people who teach computers using lots of examples. The computer finds patterns and uses them to help us.", emoji: "📚" },
+      { id: "s2", type: "info", title: "Not Magic", text: "AI is made by people who teach computers using lots of examples. This is called training. The computer finds patterns and uses them to help us.", emoji: "📚" },
       { id: "s3", type: "mcq", question: "What does AI stand for?", options: [
         { id: "a", text: "Amazing Internet", correct: false, explain: "AI is about intelligence, not the internet." },
         { id: "b", text: "Artificial Intelligence", correct: true, explain: "Yes! Computers that can do smart tasks." },
@@ -18,7 +18,7 @@ export const lessons: Lesson[] = [
       ]},
       { id: "s4", type: "mcq", question: "Who teaches the computer in AI?", options: [
         { id: "a", text: "Nobody, it's magic", correct: false, explain: "AI is built by people using data and code." },
-        { id: "b", text: "People, using lots of examples", correct: true, explain: "Right! People give examples so the computer learns patterns." },
+        { id: "b", text: "People, using lots of examples", correct: true, explain: "Right! People train the AI by giving examples so the computer learns patterns." },
         { id: "c", text: "Other computers only", correct: false, explain: "People design and train AI systems." },
       ]},
     ],
