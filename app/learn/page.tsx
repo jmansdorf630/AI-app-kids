@@ -18,12 +18,11 @@ import { PageSkeleton } from "@/components/PageSkeleton";
 const TIERS: {
   key: LearnTierKey;
   label: string;
-  emoji: string;
   description: string;
 }[] = [
-  { key: "beginner", label: "Beginner", emoji: "🌱", description: "Learn the basics of AI and prompts." },
-  { key: "explorer", label: "Explorer", emoji: "🧭", description: "Go deeper into how AI predicts and learns." },
-  { key: "master", label: "Master", emoji: "👑", description: "Advanced topics and real-world impacts." },
+  { key: "beginner", label: "Beginner", description: "Learn the basics of AI and prompts." },
+  { key: "explorer", label: "Explorer", description: "Go deeper into how AI predicts and learns." },
+  { key: "master", label: "Master", description: "Advanced topics and real-world impacts." },
 ];
 
 const LOCKED_COPY: Record<LearnTierKey, string> = {
@@ -84,7 +83,7 @@ export default function LearnPage() {
         Complete lessons in each tier. Explorer unlocks after Beginner; Master unlocks at 300+ XP after Explorer.
       </p>
 
-      {TIERS.map(({ key, label, emoji, description }) => {
+      {TIERS.map(({ key, label, description }) => {
         const tierLessons = lessons.filter((l) => l.tier === key);
         if (tierLessons.length === 0) return null;
 
@@ -111,7 +110,7 @@ export default function LearnPage() {
             >
               <div>
                 <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 flex items-center gap-2">
-                  <span>{emoji}</span> {label}
+                  {label}
                   <span
                     className={`inline-block transition-transform ${collapsed ? "" : "rotate-180"}`}
                     aria-hidden
