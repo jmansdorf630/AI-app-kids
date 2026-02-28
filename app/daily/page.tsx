@@ -9,6 +9,7 @@ import { shouldReduceMotion } from "@/lib/accessibility";
 import type { ProgressState } from "@/types";
 import type { Step } from "@/types";
 import { StepRenderer } from "@/components/StepRenderer";
+import { PageSkeleton } from "@/components/PageSkeleton";
 
 const DAILY_STEPS = 5;
 const DAILY_BONUS_XP = 20;
@@ -60,7 +61,7 @@ export default function DailyPage() {
   };
 
   if (progress == null) {
-    return <div className="text-center py-8 text-gray-500">Loading...</div>;
+    return <PageSkeleton />;
   }
 
   if (!hasCompletedLessons) {
@@ -73,7 +74,7 @@ export default function DailyPage() {
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             Complete a lesson to unlock the Daily Challenge. Then come back here for a quick review!
           </p>
-          <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+          <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
             Go to Learn →
           </Link>
         </div>
@@ -91,7 +92,7 @@ export default function DailyPage() {
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             You already did today&apos;s challenge. Come back tomorrow for a new set of questions.
           </p>
-          <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+          <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
             Home →
           </Link>
         </div>
@@ -110,7 +111,7 @@ export default function DailyPage() {
           {correctCount} / {total} correct
         </p>
         <p className="text-amber-700 dark:text-amber-300 font-bold text-lg">+{xpEarned} XP bonus</p>
-        <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+        <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
           Home
         </Link>
       </div>
@@ -127,7 +128,7 @@ export default function DailyPage() {
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             Complete more lessons that have quiz steps — then you&apos;ll get a challenge here!
           </p>
-          <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+          <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
             Go to Learn →
           </Link>
         </div>

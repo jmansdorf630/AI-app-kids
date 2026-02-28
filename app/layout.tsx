@@ -25,7 +25,7 @@ export default function RootLayout({
         <ThemeAndAccessibilityInit />
         <OfflineBanner />
         <Nav />
-        <main className="max-w-2xl mx-auto px-4 pb-24 pt-4">
+        <main className="max-w-2xl mx-auto px-4 pb-24 pt-6 sm:pt-8">
           {children}
         </main>
       </body>

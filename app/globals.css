@@ -43,11 +43,12 @@ button, a[role="button"], [data-choice] {
   @apply touch-manipulation;
 }
 
-/* Focus ring for accessibility */
+/* Focus ring for accessibility — use quest primary */
 button:focus-visible,
 a:focus-visible,
 [role="button"]:focus-visible {
-  @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
+  @apply outline-none ring-2 ring-offset-2;
+  --tw-ring-color: var(--quest-primary);
 }
 .dark button:focus-visible,
 .dark a:focus-visible,

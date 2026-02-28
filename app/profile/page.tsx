@@ -11,9 +11,10 @@ import { BadgeGrid } from "@/components/BadgeGrid";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SkillProgress } from "@/components/SkillProgress";
 import { AvatarRenderer } from "@/components/avatar/AvatarRenderer";
+import { PageSkeleton } from "@/components/PageSkeleton";
 import { lessons } from "@/data/lessons";
 
-const focusRing = "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900";
+const focusRing = "focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900";
 
 export default function ProfilePage() {
   const [progress, setProgress] = useState<ProgressState | null>(null);
@@ -29,7 +30,7 @@ export default function ProfilePage() {
   };
 
   if (progress == null) {
-    return <div className="text-center py-8 text-gray-500">Loading...</div>;
+    return <PageSkeleton />;
   }
 
   const completedCount = Object.values(progress.lessons).filter((l) => l.completed).length;
@@ -43,7 +44,7 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">👤 Profile</h1>
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100">👤 Profile</h1>
 
       <section className="rounded-xl border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-800/50 p-4 flex flex-col sm:flex-row items-center gap-4">
         <AvatarRenderer equipped={avatarEquipped} size="md" />
@@ -58,7 +59,7 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/avatar"
-            className={`inline-block mt-2 px-4 py-2 rounded-xl bg-indigo-500 text-white font-semibold hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-500 ${focusRing}`}
+            className={`inline-block mt-2 px-4 py-2 rounded-xl bg-[var(--quest-primary)] text-white font-semibold hover:opacity-90 ${focusRing}`}
           >
             Customize Avatar
           </Link>
@@ -84,7 +85,7 @@ export default function ProfilePage() {
       <ProgressBar value={progressPct} label="Lessons completed" />
 
       <p className="text-sm text-gray-600 dark:text-gray-300">
-        <Link href="/settings" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
+        <Link href="/settings" className="text-[var(--quest-primary)] font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ⚙️ Sound, theme, accessibility & weekly goal →
         </Link>
       </p>

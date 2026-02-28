@@ -176,7 +176,7 @@ export default function LessonPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
+        <Link href="/learn" className="text-[var(--quest-primary)] font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ← Back
         </Link>
         <span

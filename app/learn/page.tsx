@@ -13,6 +13,7 @@ import {
 } from "@/lib/learnHelpers";
 import { LessonCard, type LessonCardState } from "@/components/LessonCard";
 import { ProgressBar } from "@/components/ProgressBar";
+import { PageSkeleton } from "@/components/PageSkeleton";
 
 const TIERS: {
   key: LearnTierKey;
@@ -47,7 +48,7 @@ export default function LearnPage() {
   }, []);
 
   if (progress == null) {
-    return <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>;
+    return <PageSkeleton />;
   }
 
   const nextUpId = getNextUpLessonId(progress);
@@ -78,7 +79,7 @@ export default function LearnPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">📚 Lesson map</h1>
+      <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100">📚 Lesson map</h1>
       <p className="text-gray-600 dark:text-gray-300">
         Complete lessons in each tier. Explorer unlocks after Beginner; Master unlocks at 300+ XP after Explorer.
       </p>

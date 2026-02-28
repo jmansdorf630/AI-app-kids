@@ -7,6 +7,7 @@ import { setTheme } from "@/lib/theme";
 import { applyAccessibilitySettings } from "@/lib/accessibility";
 import type { ProgressState, ThemeMode } from "@/types";
 import { initSfx } from "@/lib/sfx";
+import { PageSkeleton } from "@/components/PageSkeleton";
 
 export default function SettingsPage() {
   const [progress, setProgress] = useState<ProgressState | null>(null);
@@ -62,7 +63,7 @@ export default function SettingsPage() {
   };
 
   if (progress == null) {
-    return <div className="text-center py-8 text-gray-500">Loading...</div>;
+    return <PageSkeleton />;
   }
 
   const focusRing = "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900";
@@ -171,10 +172,18 @@ export default function SettingsPage() {
       </section>
 
       <p className="text-sm text-gray-500 dark:text-gray-300">
-        <Link href="/profile" className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
+        <Link href="/profile" className="text-[var(--quest-primary)] font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ← Back to Profile
         </Link>
       </p>
+
+      <section>
+        <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">🛠 Admin</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Manage lesson content and admin options.</p>
+        <Link href="/admin/content" className="inline-block py-2 px-4 rounded-xl border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-slate-700/50 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+          Open Admin →
+        </Link>
+      </section>
     </div>
   );
 }

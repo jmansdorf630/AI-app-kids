@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { Lesson, LastLessonRun, BadgeId } from "@/types";
+import type { Lesson, LastLessonRun } from "@/types";
 import { DEFAULT_BADGES } from "@/types";
 
 const SKILL_LABELS: Record<string, string> = {
@@ -15,9 +15,10 @@ const SKILL_LABELS: Record<string, string> = {
 interface LessonCompleteSummaryProps {
   lesson: Lesson;
   run: LastLessonRun;
+  nextLesson?: Lesson | null;
 }
 
-export function LessonCompleteSummary({ lesson, run }: LessonCompleteSummaryProps) {
+export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonCompleteSummaryProps) {
   const takeaways = lesson.summaryTakeaways ?? [];
   const skillFocus = lesson.skillFocus ?? [];
   const badgeNames = DEFAULT_BADGES.filter((b) => run.badgesAwarded.includes(b.id));
@@ -94,16 +95,28 @@ export function LessonCompleteSummary({ lesson, run }: LessonCompleteSummaryProp
         </section>
       )}
 
-      <div className="flex gap-3 justify-center pt-4">
+      {nextLesson && (
+        <section className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-950/30 p-4">
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Next up</p>
+          <Link
+            href={`/lesson/${nextLesson.id}`}
+            className="block py-3 px-4 rounded-xl bg-[var(--quest-primary)] text-white font-bold text-center hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          >
+            {nextLesson.emoji} {nextLesson.title} →
+          </Link>
+        </section>
+      )}
+
+      <div className="flex flex-wrap gap-3 justify-center pt-4">
         <Link
           href="/"
-          className="py-3 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          className="py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"
         >
           Home
         </Link>
         <Link
           href="/learn"
-          className="py-3 px-6 rounded-xl border-2 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+          className="py-3 px-6 rounded-xl border-2 border-indigo-300 dark:border-indigo-600 text-[var(--quest-primary)] font-bold focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"
         >
           Lesson map
         </Link>
