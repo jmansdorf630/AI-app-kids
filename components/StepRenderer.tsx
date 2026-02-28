@@ -137,7 +137,7 @@ function McqStepBlock({ step, onComplete }: { step: McqStep; onComplete: (c: boo
     <div className="space-y-4">
       {timerSeconds > 0 && !showFeedback && (
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-gray-600">⏱ {timerSeconds}s</span>
+          <span className="text-sm font-semibold text-gray-600 dark:text-white">⏱ {timerSeconds}s</span>
           <TimerBar
             seconds={timerSeconds}
             onTimeout={handleTimeout}
@@ -154,9 +154,9 @@ function McqStepBlock({ step, onComplete }: { step: McqStep; onComplete: (c: boo
             data-choice
             onClick={() => !showFeedback && setSelected(opt.id)}
             disabled={showFeedback}
-            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition ${
-              selected === opt.id ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
-            } ${showFeedback && opt.correct ? "border-green-500 bg-green-50" : ""} ${showFeedback && selected === opt.id && !opt.correct ? "border-red-300 bg-red-50" : ""}`}
+            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition text-gray-800 dark:text-white ${
+              selected === opt.id ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
+            } ${showFeedback && opt.correct ? "border-green-500 bg-green-50 text-gray-900 dark:text-gray-900" : ""} ${showFeedback && selected === opt.id && !opt.correct ? "border-red-300 bg-red-50 text-gray-900 dark:text-gray-900" : ""}`}
           >
             {opt.text}
           </button>
@@ -174,7 +174,7 @@ function McqStepBlock({ step, onComplete }: { step: McqStep; onComplete: (c: boo
       ) : (
         <>
           {chosen?.explain && (
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{chosen.explain}</div>
+            <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-gray-800 dark:text-white">{chosen.explain}</div>
           )}
           <button type="button" onClick={handleNext} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
@@ -227,7 +227,7 @@ function MatchStepBlock({ step, onComplete }: { step: MatchStep; onComplete: (c:
               tabIndex={0}
               onClick={() => !checked && handleLeft(left)}
               onKeyDown={(e) => { if (!checked && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); handleLeft(left); } }}
-              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${leftSelected === left ? "border-indigo-500 bg-indigo-50" : "border-gray-200"} ${pairs.some((p) => p.left === left) ? "opacity-60" : ""}`}
+              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-gray-800 dark:text-white ${leftSelected === left ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 dark:border-slate-500"} ${pairs.some((p) => p.left === left) ? "opacity-60" : ""}`}
             >
               {left}
             </div>
@@ -241,7 +241,7 @@ function MatchStepBlock({ step, onComplete }: { step: MatchStep; onComplete: (c:
               tabIndex={0}
               onClick={() => !checked && leftSelected && handleRight(right)}
               onKeyDown={(e) => { if (!checked && leftSelected && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); handleRight(right); } }}
-              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${pairs.some((p) => p.right === right) ? "opacity-60 border-green-200 bg-green-50" : "border-gray-200"}`}
+              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-gray-800 dark:text-white ${pairs.some((p) => p.right === right) ? "opacity-60 border-green-200 bg-green-50 text-gray-900 dark:text-gray-900" : "border-gray-200 dark:border-slate-500"}`}
             >
               {right}
             </div>
@@ -284,9 +284,9 @@ function OrderStepBlock({ step, onComplete }: { step: OrderStep; onComplete: (c:
       <p className="font-semibold text-gray-800 dark:text-white">{step.instruction}</p>
       <div className="space-y-2">
         {items.map((item, i) => (
-          <div key={`${item}-${i}`} className="flex items-center gap-2 p-3 rounded-xl border-2 border-gray-200 bg-white">
+          <div key={`${item}-${i}`} className="flex items-center gap-2 p-3 rounded-xl border-2 border-gray-200 dark:border-slate-500 bg-white dark:bg-slate-800/50">
             <span className="text-gray-500 dark:text-white font-bold w-6">{i + 1}.</span>
-            <span className="flex-1">{item}</span>
+            <span className="flex-1 text-gray-800 dark:text-white">{item}</span>
             <div className="flex gap-1">
               {i > 0 && (
                 <button type="button" onClick={() => move(i, i - 1)} className="px-2 py-1 rounded bg-gray-200 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label={`Move item ${i + 1} up`}>↑</button>
@@ -323,7 +323,7 @@ function SpotStepBlock({ step, onComplete }: { step: SpotStep; onComplete: (c: b
   return (
     <div className="space-y-4">
       <p className="font-semibold text-gray-700 dark:text-white">{step.instruction}</p>
-      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700 dark:text-white">{step.aiAnswer}</div>
+      <div className="p-4 rounded-xl bg-gray-100 dark:bg-slate-700/50 border-2 border-gray-200 dark:border-slate-600 italic text-gray-800 dark:text-white">{step.aiAnswer}</div>
       <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt) => (
@@ -333,9 +333,9 @@ function SpotStepBlock({ step, onComplete }: { step: SpotStep; onComplete: (c: b
             data-choice
             onClick={() => !showFeedback && setSelected(opt.id)}
             disabled={showFeedback}
-            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition ${
-              selected === opt.id ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
-            } ${showFeedback && opt.correct ? "border-green-500 bg-green-50" : ""} ${showFeedback && selected === opt.id && !opt.correct ? "border-red-300 bg-red-50" : ""}`}
+            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition text-gray-800 dark:text-white ${
+              selected === opt.id ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
+            } ${showFeedback && opt.correct ? "border-green-500 bg-green-50 text-gray-900 dark:text-gray-900" : ""} ${showFeedback && selected === opt.id && !opt.correct ? "border-red-300 bg-red-50 text-gray-900 dark:text-gray-900" : ""}`}
           >
             {opt.text}
           </button>
@@ -347,7 +347,7 @@ function SpotStepBlock({ step, onComplete }: { step: SpotStep; onComplete: (c: b
         </button>
       ) : (
         <>
-          {chosen?.explain && <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{chosen.explain}</div>}
+          {chosen?.explain && <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-gray-800 dark:text-white">{chosen.explain}</div>}
           <button type="button" onClick={() => onComplete(chosen?.correct ?? false)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -374,22 +374,22 @@ function BuildPromptStepBlock({ step, onComplete }: { step: BuildPromptStep; onC
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
-      <p className="text-sm text-gray-600">Tap fragments in the order you want them in your prompt.</p>
+      <p className="text-sm text-gray-600 dark:text-white">Tap fragments in the order you want them in your prompt.</p>
       <div className="flex flex-wrap gap-2">
         {step.fragments.map((frag) => (
           <button
             key={frag}
             type="button"
             onClick={() => toggle(frag)}
-            className={`py-2 px-3 rounded-xl border-2 font-medium transition ${
-              selected.includes(frag) ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
+            className={`py-2 px-3 rounded-xl border-2 font-medium transition text-gray-800 dark:text-white ${
+              selected.includes(frag) ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
             }`}
           >
             {frag}
           </button>
         ))}
       </div>
-      <div className="text-sm text-gray-600">Your order: {selected.length ? selected.join(" → ") : "(tap to add)"}</div>
+      <div className="text-sm text-gray-600 dark:text-white">Your order: {selected.length ? selected.join(" → ") : "(tap to add)"}</div>
       {!showFeedback ? (
         <button type="button" onClick={() => setShowFeedback(true)} disabled={selected.length === 0} className="w-full py-3 rounded-xl bg-indigo-500 text-white font-bold disabled:opacity-50">
           Check
@@ -397,7 +397,7 @@ function BuildPromptStepBlock({ step, onComplete }: { step: BuildPromptStep; onC
       ) : (
         <>
           <p className={isCorrect ? "text-green-600 font-bold" : "text-amber-600 font-bold"}>{isCorrect ? "Correct!" : "Not quite the best order."}</p>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-gray-800 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={() => onComplete(isCorrect)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -441,11 +441,11 @@ function DetectRiskStepBlock({ step, onComplete }: { step: DetectRiskStep; onCom
     <div className="space-y-4">
       {timerSeconds > 0 && !showFeedback && (
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-gray-600">⏱ {timerSeconds}s</span>
+          <span className="text-sm font-semibold text-gray-600 dark:text-white">⏱ {timerSeconds}s</span>
           <TimerBar seconds={timerSeconds} onTimeout={handleTimeout} onTick={(left) => setTimeLeftWhenAnswered(left)} />
         </div>
       )}
-      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700 dark:text-white">{step.aiAnswer}</div>
+      <div className="p-4 rounded-xl bg-gray-100 dark:bg-slate-700/50 border-2 border-gray-200 dark:border-slate-600 italic text-gray-800 dark:text-white">{step.aiAnswer}</div>
       <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt, i) => (
@@ -454,9 +454,9 @@ function DetectRiskStepBlock({ step, onComplete }: { step: DetectRiskStep; onCom
             type="button"
             onClick={() => !showFeedback && setSelected(i)}
             disabled={showFeedback}
-            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition ${
-              selected === i ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
-            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50" : ""}`}
+            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition text-gray-800 dark:text-white ${
+              selected === i ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
+            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50 text-gray-900 dark:text-gray-900" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50 text-gray-900 dark:text-gray-900" : ""}`}
           >
             {opt}
           </button>
@@ -468,7 +468,7 @@ function DetectRiskStepBlock({ step, onComplete }: { step: DetectRiskStep; onCom
         </button>
       ) : (
         <>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-gray-800 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={handleNext} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -484,9 +484,9 @@ function ScenarioStepBlock({ step, onComplete }: { step: ScenarioStep; onComplet
   const correct = selected === step.correctIndex;
   return (
     <div className="space-y-4">
-      <div className="p-4 rounded-xl bg-amber-50 border-2 border-amber-200">
-        <p className="font-semibold text-amber-900 mb-1">📖 Story</p>
-        <p className="text-gray-700 dark:text-white">{step.story}</p>
+      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-200 dark:border-amber-700">
+        <p className="font-semibold text-amber-900 dark:text-amber-100 mb-1">📖 Story</p>
+        <p className="text-gray-800 dark:text-white">{step.story}</p>
       </div>
       <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
@@ -496,9 +496,9 @@ function ScenarioStepBlock({ step, onComplete }: { step: ScenarioStep; onComplet
             type="button"
             onClick={() => !showFeedback && setSelected(i)}
             disabled={showFeedback}
-            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition ${
-              selected === i ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
-            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50" : ""}`}
+            className={`w-full text-left py-3 px-4 rounded-xl border-2 font-semibold transition text-gray-800 dark:text-white ${
+              selected === i ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
+            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50 text-gray-900 dark:text-gray-900" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50 text-gray-900 dark:text-gray-900" : ""}`}
           >
             {opt}
           </button>
@@ -510,7 +510,7 @@ function ScenarioStepBlock({ step, onComplete }: { step: ScenarioStep; onComplet
         </button>
       ) : (
         <>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-gray-800 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={() => onComplete(correct)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -528,7 +528,7 @@ function NextWordPredictionStepBlock({ step, onComplete }: { step: NextWordPredi
   return (
     <div className="space-y-4">
       <p className="text-lg font-medium text-gray-800 dark:text-white">{sentenceWithBlank}</p>
-      <p className="text-sm text-gray-600">Pick the word that best fits the blank (like an LLM would predict).</p>
+      <p className="text-sm text-gray-600 dark:text-white">Pick the word that best fits the blank (like an LLM would predict).</p>
       <div className="flex flex-wrap gap-2">
         {step.options.map((opt, i) => (
           <button
@@ -536,9 +536,9 @@ function NextWordPredictionStepBlock({ step, onComplete }: { step: NextWordPredi
             type="button"
             onClick={() => !showFeedback && setSelected(i)}
             disabled={showFeedback}
-            className={`py-3 px-4 rounded-xl border-2 font-semibold transition ${
-              selected === i ? "border-indigo-500 bg-indigo-50" : "border-gray-200 hover:border-indigo-300"
-            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50" : ""}`}
+            className={`py-3 px-4 rounded-xl border-2 font-semibold transition text-gray-800 dark:text-white ${
+              selected === i ? "border-indigo-500 bg-indigo-50 text-gray-900 dark:text-gray-900" : "border-gray-200 hover:border-indigo-300 dark:border-slate-500"
+            } ${showFeedback && i === step.correctIndex ? "border-green-500 bg-green-50 text-gray-900 dark:text-gray-900" : ""} ${showFeedback && selected === i && i !== step.correctIndex ? "border-red-300 bg-red-50 text-gray-900 dark:text-gray-900" : ""}`}
           >
             {opt}
           </button>
