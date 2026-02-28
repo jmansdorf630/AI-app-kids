@@ -96,7 +96,7 @@ export default function HomePage() {
       {nextLesson && nextUnlocked && (
         <section className="rounded-2xl border-2 border-indigo-400 dark:border-indigo-500 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-slate-800/60 p-6 sm:p-8 shadow-xl dark:shadow-indigo-900/30">
           <p className="font-bold text-xl sm:text-2xl text-gray-800 dark:text-gray-100 mb-1">
-            {nextLesson.emoji} {nextLesson.title}
+            {nextLesson.title}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
             {isNewUser ? "Your first lesson — tap to start!" : "Your next lesson — ready when you are!"}

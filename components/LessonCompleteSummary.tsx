@@ -29,7 +29,7 @@ export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonComplet
         <div className="text-5xl mb-2">🎉</div>
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Lesson Complete!</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          {lesson.emoji} {lesson.title}
+          {lesson.title}
         </p>
       </div>
 
@@ -102,7 +102,7 @@ export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonComplet
             href={`/lesson/${nextLesson.id}`}
             className="block py-3 px-4 rounded-xl bg-[var(--quest-primary)] text-white font-bold text-center hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"
           >
-            {nextLesson.emoji} {nextLesson.title} →
+            {nextLesson.title} →
           </Link>
         </section>
       )}

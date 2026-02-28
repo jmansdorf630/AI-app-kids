@@ -45,11 +45,7 @@ export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier =
 
   const content = (
     <>
-      <div className="flex items-start gap-3">
-        <span className="text-4xl flex-shrink-0">
-          {isLocked ? "🔒" : lesson.emoji}
-        </span>
-        <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-bold text-lg text-gray-800 dark:text-gray-100">{lesson.title}</h3>
             {isCompleted && (
@@ -89,7 +85,6 @@ export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier =
             )}
           </div>
         </div>
-      </div>
     </>
   );
 
