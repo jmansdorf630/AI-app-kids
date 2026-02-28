@@ -13,7 +13,7 @@ export function ProgressBar({ value, max = 100, label, className = "" }: Progres
   return (
     <div className={className}>
       {label && (
-        <div className="flex justify-between text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">
+        <div className="flex justify-between text-sm font-semibold text-gray-600 dark:text-white mb-1">
           <span>{label}</span>
           <span>{Math.round(pct)}%</span>
         </div>

@@ -27,7 +27,7 @@ export function Nav() {
               <Link
                 key={href}
                 href={href}
-                className={`px-3 py-2 rounded-xl text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${isActive ? "bg-[var(--quest-primary)]/20 text-[var(--quest-primary)] ring-2 ring-[var(--quest-primary)]/40 dark:ring-[var(--quest-primary)]/50" : "text-gray-600 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/30"}`}
+                className={`px-3 py-2 rounded-xl text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 ${isActive ? "bg-[var(--quest-primary)]/20 text-[var(--quest-primary)] ring-2 ring-[var(--quest-primary)]/40 dark:ring-[var(--quest-primary)]/50" : "text-gray-600 dark:text-white hover:bg-indigo-50 dark:hover:bg-indigo-900/30"}`}
               >
                 <span className="hidden sm:inline">{label}</span>
                 <span className="sm:hidden">{emoji}</span>

@@ -103,7 +103,7 @@ export default function AvatarPage() {
   };
 
   if (progress == null) {
-    return <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>;
+    return <div className="text-center py-8 text-gray-500 dark:text-white">Loading...</div>;
   }
 
   const equipped = progress.avatar?.equipped ?? { bodyColor: "blue", eyes: "happy", headgear: null, accessory: null, effect: null };
@@ -136,7 +136,7 @@ export default function AvatarPage() {
             className={`px-3 py-2 rounded-xl border-2 text-sm font-semibold ${focusRing} ${
               category === key
                 ? "border-indigo-500 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200"
-                : "border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300"
+                : "border-gray-200 dark:border-slate-600 text-gray-700 dark:text-white"
             }`}
           >
             {emoji} {label}
@@ -160,7 +160,7 @@ export default function AvatarPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-bold text-gray-800 dark:text-gray-100">None</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">No headpiece</p>
+                <p className="text-sm text-gray-600 dark:text-white">No headpiece</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
@@ -194,7 +194,7 @@ export default function AvatarPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="font-bold text-gray-800 dark:text-gray-100">None</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">No backpack or accessory</p>
+                <p className="text-sm text-gray-600 dark:text-white">No backpack or accessory</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
@@ -241,7 +241,7 @@ export default function AvatarPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-bold text-gray-800 dark:text-gray-100">{item.name}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{item.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-white">{item.description}</p>
                   <p className="text-sm font-medium text-amber-700 dark:text-amber-300 mt-1">
                     {item.xpCost === 0 ? "Free (earned)" : `${item.xpCost} XP`}
                   </p>
@@ -275,7 +275,7 @@ export default function AvatarPage() {
                   </button>
                 )}
                 {!unlocked && !owned && (
-                  <span className="px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400">Locked</span>
+                  <span className="px-3 py-1.5 text-sm text-gray-500 dark:text-white">Locked</span>
                 )}
                 {unlocked && !afford && !owned && item.xpCost > 0 && (
                   <span className="px-3 py-1.5 text-sm text-amber-700 dark:text-amber-300">Need {xpShortfall} more XP</span>

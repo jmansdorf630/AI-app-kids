@@ -70,7 +70,7 @@ export default function HomePage() {
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100">
           {isNewUser ? "Ready to learn? 🤖" : "Welcome back!"}
         </h1>
-        <p className="text-gray-600 dark:text-gray-300 mt-1">
+        <p className="text-gray-600 dark:text-white mt-1">
           {isNewUser
             ? "Learn how AI and LLMs work — one short lesson at a time."
             : "Your next adventure is waiting."}
@@ -86,7 +86,7 @@ export default function HomePage() {
               <span>{progress.currentStreak}d</span>
             </span>
           ) : (
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 italic">Start a streak!</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-white italic">Start a streak!</span>
           )}
           <span className="font-bold text-[var(--quest-primary)] text-sm">Lv {level}</span>
         </div>
@@ -98,7 +98,7 @@ export default function HomePage() {
           <p className="font-bold text-xl sm:text-2xl text-gray-800 dark:text-gray-100 mb-1">
             {nextLesson.title}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-sm text-gray-600 dark:text-white mb-6">
             {isNewUser ? "Your first lesson — tap to start!" : "Your next lesson — ready when you are!"}
           </p>
           <Link
@@ -153,7 +153,7 @@ export default function HomePage() {
       <details className="rounded-xl border-2 border-gray-200 dark:border-slate-600 bg-gray-50/50 dark:bg-slate-800/30 overflow-hidden" open={progressDefaultOpen}>
         <summary className="px-4 py-3 font-bold text-gray-800 dark:text-gray-100 cursor-pointer list-none flex items-center justify-between gap-2">
           <span>Your progress</span>
-          <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+          <span className="text-sm font-normal text-gray-500 dark:text-white">
             {completedCount}/{totalLessons} lessons · Lv {level}
           </span>
         </summary>
@@ -165,32 +165,32 @@ export default function HomePage() {
             </div>
           )}
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Level · {Math.round(levelProgress)}% to Level {level + 1}</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-white mb-1">Level · {Math.round(levelProgress)}% to Level {level + 1}</p>
             <ProgressBar value={levelProgress} label={`${xpToNextLevel} XP to next level`} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Course</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-white mb-1">Course</p>
             <ProgressBar value={progressPct} label={`${completedCount} of ${totalLessons} lessons`} />
           </div>
           <div>
             <div className="flex items-center justify-between gap-2 mb-1">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">📅 Weekly Mission</p>
+              <p className="text-sm font-medium text-gray-700 dark:text-white">📅 Weekly Mission</p>
               {weeklyComplete && <span className="text-xs font-bold text-amber-700 dark:text-amber-300">Done ✅</span>}
             </div>
             <ProgressBar value={weeklyTarget ? (weeklyProgress / weeklyTarget) * 100 : 0} label={`${weeklyProgress}/${weeklyTarget} lessons · +${weekly.bonusXP} XP reward`} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🏅 Achievements</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-white mb-2">🏅 Achievements</p>
             {mostRecentBadge ? (
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{mostRecentBadge.emoji}</span>
                 <div>
                   <p className="font-semibold text-gray-800 dark:text-gray-100">{mostRecentBadge.name}</p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">{mostRecentBadge.description}</p>
+                  <p className="text-xs text-gray-600 dark:text-white">{mostRecentBadge.description}</p>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">Earn your first badge by completing a lesson!</p>
+              <p className="text-sm text-gray-500 dark:text-white">Earn your first badge by completing a lesson!</p>
             )}
           </div>
         </div>

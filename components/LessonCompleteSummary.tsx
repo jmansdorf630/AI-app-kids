@@ -28,7 +28,7 @@ export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonComplet
       <div className="text-center">
         <div className="text-5xl mb-2">🎉</div>
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Lesson Complete!</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
+        <p className="text-lg text-gray-600 dark:text-white">
           {lesson.title}
         </p>
       </div>
@@ -36,7 +36,7 @@ export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonComplet
       {takeaways.length > 0 && (
         <section>
           <h2 className="font-bold text-gray-800 dark:text-gray-100 mb-2">You learned:</h2>
-          <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+          <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-white">
             {takeaways.map((t, i) => (
               <li key={i}>{t}</li>
             ))}
@@ -97,7 +97,7 @@ export function LessonCompleteSummary({ lesson, run, nextLesson }: LessonComplet
 
       {nextLesson && (
         <section className="rounded-xl border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-950/30 p-4">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Next up</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-white mb-2">Next up</p>
           <Link
             href={`/lesson/${nextLesson.id}`}
             className="block py-3 px-4 rounded-xl bg-[var(--quest-primary)] text-white font-bold text-center hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"

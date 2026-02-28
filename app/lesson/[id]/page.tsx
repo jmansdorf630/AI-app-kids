@@ -151,7 +151,7 @@ export default function LessonPage() {
   if (lesson == null) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600 dark:text-gray-300">Lesson not found.</p>
+        <p className="text-gray-600 dark:text-white">Lesson not found.</p>
         <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Back to Learn
         </Link>
@@ -162,7 +162,7 @@ export default function LessonPage() {
   if (progress != null && !unlocked) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600 dark:text-gray-300">🔒 Complete the previous lesson or reach the required tier!</p>
+        <p className="text-gray-600 dark:text-white">🔒 Complete the previous lesson or reach the required tier!</p>
         <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Back to Learn
         </Link>

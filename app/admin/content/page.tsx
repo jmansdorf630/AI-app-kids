@@ -77,14 +77,14 @@ export default function AdminContentPage() {
             onChange={handleAdminToggle}
             className="w-4 h-4 rounded border-2 border-indigo-500 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
           />
-          <span className="text-gray-800 dark:text-gray-200 font-medium">Unlimited XP (unlock all avatar items)</span>
+          <span className="text-gray-800 dark:text-white font-medium">Unlimited XP (unlock all avatar items)</span>
         </label>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        <p className="text-sm text-gray-600 dark:text-white mt-1">
           When on: 99,999 XP and all avatar shop items show as unlockable. Go to Avatar or Home to see it.
         </p>
       </section>
 
-      <p className="text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-sm text-gray-600 dark:text-white">
         View and edit lesson JSON. Export to download, or upload a JSON file to import. Changes here are for export only — the app still uses the code in <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">/data/lessons.ts</code>.
       </p>
 

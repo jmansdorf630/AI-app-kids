@@ -59,9 +59,9 @@ export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier =
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mt-0.5">{lesson.description}</p>
+          <p className="text-sm text-gray-600 dark:text-white line-clamp-2 mt-0.5">{lesson.description}</p>
           {isLocked && unlockRequirement && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">
+            <p className="text-sm text-gray-500 dark:text-white mt-2 font-medium">
               {unlockRequirement}
             </p>
           )}
@@ -74,7 +74,7 @@ export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier =
               <span>{lesson.xpReward} XP</span>
             </span>
             {isCompleted && bestScore != null && (
-              <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+              <span className="text-sm font-semibold text-gray-600 dark:text-white">
                 Score: {bestScore}%
               </span>
             )}

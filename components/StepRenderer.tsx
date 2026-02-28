@@ -79,8 +79,8 @@ function InfoStepBlock({ step, onComplete }: { step: InfoStep; onComplete: (c: b
   return (
     <div className="space-y-4">
       {step.emoji && <div className="text-5xl text-center">{step.emoji}</div>}
-      <h2 className="text-xl font-bold text-gray-800">{step.title}</h2>
-      <p className="text-gray-700 leading-relaxed">{step.text}</p>
+      <h2 className="text-xl font-bold text-gray-800 dark:text-white">{step.title}</h2>
+      <p className="text-gray-700 dark:text-white leading-relaxed">{step.text}</p>
       <button
         type="button"
         onClick={() => onComplete(true)}
@@ -145,7 +145,7 @@ function McqStepBlock({ step, onComplete }: { step: McqStep; onComplete: (c: boo
           />
         </div>
       )}
-      <h2 className="text-lg font-bold text-gray-800">{step.question}</h2>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt) => (
           <button
@@ -174,7 +174,7 @@ function McqStepBlock({ step, onComplete }: { step: McqStep; onComplete: (c: boo
       ) : (
         <>
           {chosen?.explain && (
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700">{chosen.explain}</div>
+            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{chosen.explain}</div>
           )}
           <button type="button" onClick={handleNext} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
@@ -217,7 +217,7 @@ function MatchStepBlock({ step, onComplete }: { step: MatchStep; onComplete: (c:
 
   return (
     <div className="space-y-4">
-      <p className="font-semibold text-gray-800">{step.instruction}</p>
+      <p className="font-semibold text-gray-800 dark:text-white">{step.instruction}</p>
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 space-y-2">
           {lefts.map((left) => (
@@ -281,11 +281,11 @@ function OrderStepBlock({ step, onComplete }: { step: OrderStep; onComplete: (c:
   };
   return (
     <div className="space-y-4">
-      <p className="font-semibold text-gray-800">{step.instruction}</p>
+      <p className="font-semibold text-gray-800 dark:text-white">{step.instruction}</p>
       <div className="space-y-2">
         {items.map((item, i) => (
           <div key={`${item}-${i}`} className="flex items-center gap-2 p-3 rounded-xl border-2 border-gray-200 bg-white">
-            <span className="text-gray-500 font-bold w-6">{i + 1}.</span>
+            <span className="text-gray-500 dark:text-white font-bold w-6">{i + 1}.</span>
             <span className="flex-1">{item}</span>
             <div className="flex gap-1">
               {i > 0 && (
@@ -322,9 +322,9 @@ function SpotStepBlock({ step, onComplete }: { step: SpotStep; onComplete: (c: b
   const chosen = selected != null ? step.options.find((o) => o.id === selected) : null;
   return (
     <div className="space-y-4">
-      <p className="font-semibold text-gray-700">{step.instruction}</p>
-      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700">{step.aiAnswer}</div>
-      <h2 className="text-lg font-bold text-gray-800">{step.question}</h2>
+      <p className="font-semibold text-gray-700 dark:text-white">{step.instruction}</p>
+      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700 dark:text-white">{step.aiAnswer}</div>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt) => (
           <button
@@ -347,7 +347,7 @@ function SpotStepBlock({ step, onComplete }: { step: SpotStep; onComplete: (c: b
         </button>
       ) : (
         <>
-          {chosen?.explain && <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700">{chosen.explain}</div>}
+          {chosen?.explain && <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{chosen.explain}</div>}
           <button type="button" onClick={() => onComplete(chosen?.correct ?? false)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -373,7 +373,7 @@ function BuildPromptStepBlock({ step, onComplete }: { step: BuildPromptStep; onC
   const isCorrect = checkCorrect();
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-gray-800">{step.question}</h2>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <p className="text-sm text-gray-600">Tap fragments in the order you want them in your prompt.</p>
       <div className="flex flex-wrap gap-2">
         {step.fragments.map((frag) => (
@@ -397,7 +397,7 @@ function BuildPromptStepBlock({ step, onComplete }: { step: BuildPromptStep; onC
       ) : (
         <>
           <p className={isCorrect ? "text-green-600 font-bold" : "text-amber-600 font-bold"}>{isCorrect ? "Correct!" : "Not quite the best order."}</p>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={() => onComplete(isCorrect)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -445,8 +445,8 @@ function DetectRiskStepBlock({ step, onComplete }: { step: DetectRiskStep; onCom
           <TimerBar seconds={timerSeconds} onTimeout={handleTimeout} onTick={(left) => setTimeLeftWhenAnswered(left)} />
         </div>
       )}
-      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700">{step.aiAnswer}</div>
-      <h2 className="text-lg font-bold text-gray-800">{step.question}</h2>
+      <div className="p-4 rounded-xl bg-gray-100 border-2 border-gray-200 italic text-gray-700 dark:text-white">{step.aiAnswer}</div>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt, i) => (
           <button
@@ -468,7 +468,7 @@ function DetectRiskStepBlock({ step, onComplete }: { step: DetectRiskStep; onCom
         </button>
       ) : (
         <>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={handleNext} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -486,9 +486,9 @@ function ScenarioStepBlock({ step, onComplete }: { step: ScenarioStep; onComplet
     <div className="space-y-4">
       <div className="p-4 rounded-xl bg-amber-50 border-2 border-amber-200">
         <p className="font-semibold text-amber-900 mb-1">📖 Story</p>
-        <p className="text-gray-700">{step.story}</p>
+        <p className="text-gray-700 dark:text-white">{step.story}</p>
       </div>
-      <h2 className="text-lg font-bold text-gray-800">{step.question}</h2>
+      <h2 className="text-lg font-bold text-gray-800 dark:text-white">{step.question}</h2>
       <div className="space-y-2">
         {step.options.map((opt, i) => (
           <button
@@ -510,7 +510,7 @@ function ScenarioStepBlock({ step, onComplete }: { step: ScenarioStep; onComplet
         </button>
       ) : (
         <>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700">{step.explanation}</div>
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-gray-700 dark:text-white">{step.explanation}</div>
           <button type="button" onClick={() => onComplete(correct)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
             Next →
           </button>
@@ -527,7 +527,7 @@ function NextWordPredictionStepBlock({ step, onComplete }: { step: NextWordPredi
   const sentenceWithBlank = step.sentence.replace("____", "______");
   return (
     <div className="space-y-4">
-      <p className="text-lg font-medium text-gray-800">{sentenceWithBlank}</p>
+      <p className="text-lg font-medium text-gray-800 dark:text-white">{sentenceWithBlank}</p>
       <p className="text-sm text-gray-600">Pick the word that best fits the blank (like an LLM would predict).</p>
       <div className="flex flex-wrap gap-2">
         {step.options.map((opt, i) => (

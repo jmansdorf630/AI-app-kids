@@ -17,9 +17,9 @@ export function BadgeGrid({ badges, className = "" }: BadgeGridProps) {
           title={b.earnedAt ? b.description : `Locked: ${b.description}`}
         >
           <div className="text-3xl mb-1">{b.earnedAt ? b.emoji : "🔒"}</div>
-          <div className="font-bold text-sm text-gray-800 dark:text-gray-200">{b.name}</div>
+          <div className="font-bold text-sm text-gray-800 dark:text-white">{b.name}</div>
           {b.earnedAt && (
-            <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Earned!</div>
+            <div className="text-xs text-gray-500 dark:text-white mt-0.5">Earned!</div>
           )}
         </div>
       ))}

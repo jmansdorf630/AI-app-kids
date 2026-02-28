@@ -79,7 +79,7 @@ export default function LearnPage() {
   return (
     <div className="space-y-8">
       <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100">📚 Lesson map</h1>
-      <p className="text-gray-600 dark:text-gray-300">
+      <p className="text-gray-600 dark:text-white">
         Complete lessons in each tier. Explorer unlocks after Beginner; Master unlocks at 300+ XP after Explorer.
       </p>
 
@@ -118,13 +118,13 @@ export default function LearnPage() {
                     ▼
                   </span>
                 </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{description}</p>
+                <p className="text-sm text-gray-600 dark:text-white mt-0.5">{description}</p>
                 {tierLocked ? (
                   <p className="text-sm font-medium text-amber-700 dark:text-amber-300 mt-1">
                     {LOCKED_COPY[key]}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm text-gray-600 dark:text-white mt-1">
                     {tierProg.completed} / {tierProg.total} completed
                   </p>
                 )}
@@ -168,7 +168,7 @@ export default function LearnPage() {
                   Reward earned ✅ {reward.emoji} {reward.badge}
                 </p>
               ) : (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-white">
                   Finish {label} → Earn {reward.emoji} {reward.badge} badge
                 </p>
               )}

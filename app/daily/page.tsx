@@ -71,7 +71,7 @@ export default function DailyPage() {
         <div className="rounded-2xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-8 text-center">
           <p className="text-4xl mb-4" aria-hidden>🔒</p>
           <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">No challenge yet</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-gray-600 dark:text-white mb-6">
             Complete a lesson to unlock the Daily Challenge. Then come back here for a quick review!
           </p>
           <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
@@ -89,7 +89,7 @@ export default function DailyPage() {
         <div className="rounded-2xl border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-8 text-center">
           <p className="text-4xl mb-4" aria-hidden>✅</p>
           <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">You&apos;re done for today!</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-gray-600 dark:text-white mb-6">
             You already did today&apos;s challenge. Come back tomorrow for a new set of questions.
           </p>
           <Link href="/" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
@@ -107,7 +107,7 @@ export default function DailyPage() {
       <div className="space-y-6 text-center">
         <div className="text-5xl">⚡</div>
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Daily Challenge complete!</h1>
-        <p className="text-lg text-gray-700 dark:text-gray-200">
+        <p className="text-lg text-gray-700 dark:text-white">
           {correctCount} / {total} correct
         </p>
         <p className="text-amber-700 dark:text-amber-300 font-bold text-lg">+{xpEarned} XP bonus</p>
@@ -125,7 +125,7 @@ export default function DailyPage() {
         <div className="rounded-2xl border-2 border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-800/40 p-8 text-center">
           <p className="text-4xl mb-4" aria-hidden>📚</p>
           <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">Not enough questions yet</h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-gray-600 dark:text-white mb-6">
             Complete more lessons that have quiz steps — then you&apos;ll get a challenge here!
           </p>
           <Link href="/learn" className="inline-block py-3 px-6 rounded-xl bg-[var(--quest-primary)] text-white font-bold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900">
@@ -140,7 +140,7 @@ export default function DailyPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">⚡ Daily Challenge</h1>
-      <p className="text-sm text-gray-600 dark:text-gray-300">
+      <p className="text-sm text-gray-600 dark:text-white">
         Question {stepIndex + 1} of {dailySteps.length}
       </p>
       <div className="rounded-2xl border-2 border-amber-200 dark:border-amber-800 bg-white dark:bg-slate-800/50 p-6">

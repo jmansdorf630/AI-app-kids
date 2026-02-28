@@ -50,8 +50,8 @@ export default function ProfilePage() {
         <AvatarRenderer equipped={avatarEquipped} size="md" />
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-gray-800 dark:text-gray-100">Your Avatar</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{inventoryCount} items in collection</p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm text-gray-600 dark:text-white">{inventoryCount} items in collection</p>
+          <p className="text-sm text-gray-600 dark:text-white mt-1">
             Equipped: {avatarEquipped.bodyColor}, {avatarEquipped.eyes}
             {avatarEquipped.headgear && `, ${avatarEquipped.headgear}`}
             {avatarEquipped.accessory && `, ${avatarEquipped.accessory}`}
@@ -70,7 +70,7 @@ export default function ProfilePage() {
         <XPChip xp={progress.totalXp} />
         <StreakFlame streak={progress.currentStreak} />
         <span className="font-bold text-indigo-600 dark:text-indigo-400">Level {level}</span>
-        <span className="text-gray-600 dark:text-gray-300 font-semibold">
+        <span className="text-gray-600 dark:text-white font-semibold">
           Longest streak: <strong>{progress.longestStreak}</strong> days
         </span>
       </div>
@@ -84,7 +84,7 @@ export default function ProfilePage() {
       <ProgressBar value={levelProgress} label={`Level ${level} → ${level + 1}`} />
       <ProgressBar value={progressPct} label="Lessons completed" />
 
-      <p className="text-sm text-gray-600 dark:text-gray-300">
+      <p className="text-sm text-gray-600 dark:text-white">
         <Link href="/settings" className="text-[var(--quest-primary)] font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ⚙️ Sound, theme, accessibility & weekly goal →
         </Link>
@@ -102,7 +102,7 @@ export default function ProfilePage() {
 
       <section>
         <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2">Reset progress</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+        <p className="text-sm text-gray-600 dark:text-white mb-2">
           Start over from zero. All XP, streaks, badges, and skills will be cleared.
         </p>
         <button
