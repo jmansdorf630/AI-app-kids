@@ -223,8 +223,11 @@ function MatchStepBlock({ step, onComplete }: { step: MatchStep; onComplete: (c:
           {lefts.map((left) => (
             <div
               key={left}
+              role="button"
+              tabIndex={0}
               onClick={() => !checked && handleLeft(left)}
-              className={`py-2 px-3 rounded-xl border-2 cursor-pointer ${leftSelected === left ? "border-indigo-500 bg-indigo-50" : "border-gray-200"} ${pairs.some((p) => p.left === left) ? "opacity-60" : ""}`}
+              onKeyDown={(e) => { if (!checked && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); handleLeft(left); } }}
+              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${leftSelected === left ? "border-indigo-500 bg-indigo-50" : "border-gray-200"} ${pairs.some((p) => p.left === left) ? "opacity-60" : ""}`}
             >
               {left}
             </div>
@@ -234,8 +237,11 @@ function MatchStepBlock({ step, onComplete }: { step: MatchStep; onComplete: (c:
           {shuffledRight.map((right) => (
             <div
               key={right}
+              role="button"
+              tabIndex={0}
               onClick={() => !checked && leftSelected && handleRight(right)}
-              className={`py-2 px-3 rounded-xl border-2 cursor-pointer ${pairs.some((p) => p.right === right) ? "opacity-60 border-green-200 bg-green-50" : "border-gray-200"}`}
+              onKeyDown={(e) => { if (!checked && leftSelected && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); handleRight(right); } }}
+              className={`py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${pairs.some((p) => p.right === right) ? "opacity-60 border-green-200 bg-green-50" : "border-gray-200"}`}
             >
               {right}
             </div>
@@ -283,17 +289,17 @@ function OrderStepBlock({ step, onComplete }: { step: OrderStep; onComplete: (c:
             <span className="flex-1">{item}</span>
             <div className="flex gap-1">
               {i > 0 && (
-                <button type="button" onClick={() => move(i, i - 1)} className="px-2 py-1 rounded bg-gray-200 font-bold">↑</button>
+                <button type="button" onClick={() => move(i, i - 1)} className="px-2 py-1 rounded bg-gray-200 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label={`Move item ${i + 1} up`}>↑</button>
               )}
               {i < items.length - 1 && (
-                <button type="button" onClick={() => move(i, i + 1)} className="px-2 py-1 rounded bg-gray-200 font-bold">↓</button>
+                <button type="button" onClick={() => move(i, i + 1)} className="px-2 py-1 rounded bg-gray-200 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label={`Move item ${i + 1} down`}>↓</button>
               )}
             </div>
           </div>
         ))}
       </div>
       {!checked ? (
-        <button type="button" onClick={() => setChecked(true)} className="w-full py-3 rounded-xl bg-indigo-500 text-white font-bold">
+        <button type="button" onClick={() => setChecked(true)} className="w-full py-3 rounded-xl bg-indigo-500 text-white font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Check order
         </button>
       ) : (
@@ -301,7 +307,7 @@ function OrderStepBlock({ step, onComplete }: { step: OrderStep; onComplete: (c:
           <p className={isCorrect ? "text-green-600 font-bold" : "text-amber-600 font-bold"}>
             {isCorrect ? "Correct order!" : "Not quite. Re-read the lesson to see the right order."}
           </p>
-          <button type="button" onClick={() => onComplete(isCorrect)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold">
+          <button type="button" onClick={() => onComplete(isCorrect)} className="w-full py-3 rounded-xl bg-green-500 text-white font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             Next →
           </button>
         </>

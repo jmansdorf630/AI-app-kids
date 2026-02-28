@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import confetti from "canvas-confetti";
@@ -40,10 +40,15 @@ export default function LessonPage() {
   const [stepIndex, setStepIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [skillXPEarnedBySkill, setSkillXPEarnedBySkill] = useState<Partial<Record<SkillTag, number>>>({});
+  const stepContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setProgress(loadProgress());
   }, []);
+
+  useEffect(() => {
+    stepContentRef.current?.focus({ preventScroll: true });
+  }, [stepIndex]);
 
   const unlocked =
     progress != null &&
@@ -170,16 +175,24 @@ export default function LessonPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           ← Back
         </Link>
-        <span className="text-gray-500 dark:text-gray-400 font-semibold">
+        <span
+          className="rounded-full bg-indigo-100 dark:bg-indigo-900/50 px-3 py-1.5 text-sm font-bold text-indigo-800 dark:text-indigo-200"
+          aria-label={`Step ${stepIndex + 1} of ${lesson.steps.length}`}
+        >
           Step {stepIndex + 1} of {lesson.steps.length}
         </span>
       </div>
       <ProgressBar value={progressPct} />
-      <div className="rounded-2xl border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-800/50 p-6">
+      <div
+        ref={stepContentRef}
+        tabIndex={-1}
+        className="rounded-2xl border-2 border-indigo-100 dark:border-indigo-900 bg-white dark:bg-slate-800/50 p-6 outline-none focus:outline-none"
+        aria-label={`Lesson step ${stepIndex + 1}`}
+      >
         <StepRenderer key={step.id} step={step} onComplete={handleStepComplete} />
       </div>
     </div>
