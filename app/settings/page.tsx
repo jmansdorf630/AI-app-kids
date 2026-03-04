@@ -5,12 +5,19 @@ import Link from "next/link";
 import { loadProgress, updateSettings, setWeeklyGoalTarget, saveProgress } from "@/lib/progress";
 import { setTheme } from "@/lib/theme";
 import { applyAccessibilitySettings } from "@/lib/accessibility";
-import type { ProgressState, ThemeMode } from "@/types";
+import type { ProgressState, ThemeMode, LearningTrack } from "@/types";
 import { initSfx } from "@/lib/sfx";
 import { PageSkeleton } from "@/components/PageSkeleton";
 
+const TRACK_LABELS: Record<LearningTrack, string> = {
+  little_explorers: "Little Explorers (ages 6–8)",
+  ai_adventurers: "AI Adventurers (ages 9–10)",
+};
+
 export default function SettingsPage() {
   const [progress, setProgress] = useState<ProgressState | null>(null);
+  const [showGrownUpConfirm, setShowGrownUpConfirm] = useState(false);
+  const [showTrackPicker, setShowTrackPicker] = useState(false);
 
   useEffect(() => {
     setProgress(loadProgress());
@@ -62,15 +69,84 @@ export default function SettingsPage() {
     setProgress(next);
   };
 
+  const handleTrackChange = (track: LearningTrack) => {
+    if (!progress) return;
+    const next = updateSettings(progress, { learningTrack: track });
+    saveProgress(next);
+    setProgress(next);
+    setShowTrackPicker(false);
+    setShowGrownUpConfirm(false);
+  };
+
   if (progress == null) {
     return <PageSkeleton />;
   }
 
   const focusRing = "focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900";
 
+  const currentTrack = progress.settings?.learningTrack ?? "little_explorers";
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-extrabold text-gray-800 dark:text-gray-100">⚙️ Settings</h1>
+
+      <section>
+        <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">📚 Learning Track</h2>
+        <div className="rounded-xl border-2 border-indigo-100 dark:border-indigo-800 bg-white dark:bg-slate-800/50 p-4 space-y-3">
+          <p className="text-sm text-gray-600 dark:text-white">
+            Current track: <strong className="text-gray-800 dark:text-white">{TRACK_LABELS[currentTrack]}</strong>
+          </p>
+          {!showGrownUpConfirm && !showTrackPicker && (
+            <button
+              type="button"
+              onClick={() => setShowGrownUpConfirm(true)}
+              className="px-3 py-2 rounded-lg border-2 border-indigo-200 dark:border-indigo-600 font-medium text-gray-800 dark:text-white hover:bg-indigo-50 dark:hover:bg-indigo-900/30 focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+            >
+              Change track
+            </button>
+          )}
+          {showGrownUpConfirm && !showTrackPicker && (
+            <div className="space-y-2 pt-2 border-t border-gray-200 dark:border-slate-600">
+              <p className="text-sm font-medium text-gray-800 dark:text-white">Are you a grown-up? Tap Yes to change the learning track.</p>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setShowGrownUpConfirm(false); setShowTrackPicker(true); }}
+                  className="px-3 py-2 rounded-lg bg-[var(--quest-primary)] text-white font-semibold focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2"
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowGrownUpConfirm(false)}
+                  className="px-3 py-2 rounded-lg border-2 border-gray-300 dark:border-slate-500 text-gray-700 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+          {showTrackPicker && (
+            <div className="space-y-2 pt-2 border-t border-gray-200 dark:border-slate-600">
+              <p className="text-sm font-medium text-gray-800 dark:text-white">Choose a track:</p>
+              {(["little_explorers", "ai_adventurers"] as const).map((track) => (
+                <button
+                  key={track}
+                  type="button"
+                  onClick={() => handleTrackChange(track)}
+                  className={`block w-full text-left px-4 py-3 rounded-xl border-2 font-medium focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 ${
+                    currentTrack === track
+                      ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/50 dark:border-indigo-400 text-indigo-800 dark:text-indigo-100"
+                      : "border-gray-200 dark:border-slate-600 text-gray-800 dark:text-white"
+                  }`}
+                >
+                  {TRACK_LABELS[track]}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       <section>
         <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">🌓 Theme & accessibility</h2>

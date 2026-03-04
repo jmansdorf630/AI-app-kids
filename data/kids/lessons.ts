@@ -1,4 +1,4 @@
-import type { Lesson } from "@/types";
+import type { Lesson, LearningTrack } from "@/types";
 
 export const lessons: Lesson[] = [
   {
@@ -7,6 +7,7 @@ export const lessons: Lesson[] = [
     description: "Learn what artificial intelligence means in a simple way.",
     emoji: "🤖",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 15,
     steps: [
       { id: "s1", type: "info", title: "Meet AI!", text: "AI stands for Artificial Intelligence. It's when a computer can do things that seem smart — like answering questions or recognizing pictures.", emoji: "🤖" },
@@ -31,6 +32,7 @@ export const lessons: Lesson[] = [
     description: "Discover what large language models are and how they work.",
     emoji: "🧠",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 20,
     steps: [
       { id: "s1", type: "info", title: "Language Models", text: "An LLM is a Large Language Model. It's a kind of AI that reads and writes text — like a super reader and writer combined!", emoji: "📝" },
@@ -55,6 +57,7 @@ export const lessons: Lesson[] = [
     description: "Learn how we talk to AI with prompts and how it sees words as tokens.",
     emoji: "💬",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 20,
     steps: [
       { id: "s1", type: "info", title: "What's a Prompt?", text: "A prompt is what you type to the AI — your question or instruction. Like: \"What is the capital of France?\" That's a prompt!", emoji: "✏️" },
@@ -78,6 +81,7 @@ export const lessons: Lesson[] = [
     description: "Find out when AI makes things up and how to spot it.",
     emoji: "🔍",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 25,
     badgeId: "hallucination_hunter",
     badgeOnCompletion: "hallucination_hunter",
@@ -119,6 +123,7 @@ export const lessons: Lesson[] = [
     description: "Why AI should be fair to everyone.",
     emoji: "⚖️",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 20,
     steps: [
       { id: "s1", type: "info", title: "What is Bias?", text: "Bias means treating some people or ideas unfairly. AI learns from data that people made, so sometimes it can repeat unfair ideas if we're not careful.", emoji: "⚖️" },
@@ -151,6 +156,7 @@ export const lessons: Lesson[] = [
     description: "How to stay safe when using AI.",
     emoji: "🛡️",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 20,
     steps: [
       { id: "s1", type: "info", title: "Keep Your Info Private", text: "Don't share your full name, address, school name, or phone number with AI. Treat it like talking to someone you don't know — stay safe!", emoji: "🔒" },
@@ -184,6 +190,7 @@ export const lessons: Lesson[] = [
     description: "Good ways and not-so-good ways to use AI when learning.",
     emoji: "📖",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 25,
     steps: [
       { id: "s1", type: "info", title: "AI Can Help You Learn", text: "You can ask AI to explain a hard topic, give practice questions, or help you understand a word. That's using AI to learn!", emoji: "💡" },
@@ -206,6 +213,7 @@ export const lessons: Lesson[] = [
     description: "Final review: how to ask AI so you get great answers.",
     emoji: "🎓",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 30,
     badgeId: "prompt_master",
     badgeOnCompletion: "prompt_master",
@@ -233,6 +241,7 @@ export const lessons: Lesson[] = [
     description: "See how LLMs guess the next word like a super autocomplete.",
     emoji: "🔮",
     tier: "explorer",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 25,
     steps: [
       { id: "s1", type: "info", title: "Next Word Prediction", text: "An LLM reads your text and predicts what word might come next. It's like autocomplete, but for whole sentences and ideas!", emoji: "📝" },
@@ -249,6 +258,7 @@ export const lessons: Lesson[] = [
     description: "Why the data AI learns from changes its answers.",
     emoji: "📊",
     tier: "explorer",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 28,
     steps: [
       { id: "s1", type: "info", title: "Data Shapes AI", text: "AI learns from data — text, images, and more. If the data is biased or wrong, the AI can repeat those mistakes. Good data helps make good AI.", emoji: "📚" },
@@ -264,6 +274,7 @@ export const lessons: Lesson[] = [
     description: "When to search and when to ask AI.",
     emoji: "🔍",
     tier: "explorer",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 25,
     steps: [
       { id: "s1", type: "info", title: "Search vs Chat", text: "Search (like Google) finds existing web pages. AI chat invents an answer from what it learned. For up-to-date facts, search is often better. For explaining ideas, AI can help!", emoji: "💡" },
@@ -298,6 +309,7 @@ export const lessons: Lesson[] = [
     description: "When videos and images can be faked by AI.",
     emoji: "🎬",
     tier: "master",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 35,
     steps: [
       { id: "s1", type: "info", title: "What Are Deepfakes?", text: "Deepfakes are fake videos or images made by AI. Someone's face or voice can be copied to make it look like they said or did something they didn't. So don't believe everything you see!", emoji: "⚠️" },
@@ -314,6 +326,7 @@ export const lessons: Lesson[] = [
     description: "AI can sound friendly, but it doesn't have emotions or know you personally.",
     emoji: "❤️‍🩹",
     tier: "beginner",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 20,
     steps: [
       { id: "s1", type: "info", title: "Friendly but Not a Friend", text: "AI can say nice things and sound kind. But it doesn't have real feelings. It doesn't know you, miss you, or care like a person does. It's just following patterns.", emoji: "🤖" },
@@ -337,6 +350,7 @@ export const lessons: Lesson[] = [
     description: "How AI is used in games and apps — and how to think critically.",
     emoji: "🎮",
     tier: "explorer",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 25,
     steps: [
       { id: "s1", type: "info", title: "AI All Around", text: "Lots of games and apps use AI: recommendations (\"you might like this\"), feeds that show you posts, and even ads that seem to \"know\" what you like. It's not magic — it's patterns from data.", emoji: "📱" },
@@ -359,6 +373,7 @@ export const lessons: Lesson[] = [
     description: "How AI learns from examples (training) and how we use it (using).",
     emoji: "🏗️",
     tier: "explorer",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 28,
     steps: [
       { id: "s1", type: "info", title: "Two Big Phases", text: "Training is when the AI learns from huge amounts of examples — books, articles, pictures. Using is when you and I ask it questions and it answers. The AI doesn't \"study\" your question; it uses patterns it learned earlier.", emoji: "📚" },
@@ -384,6 +399,7 @@ export const lessons: Lesson[] = [
     description: "Long answers and a confident tone can still be wrong. Learn to verify.",
     emoji: "🎤",
     tier: "master",
+    tracks: ["little_explorers", "ai_adventurers"],
     xpReward: 35,
     steps: [
       { id: "s1", type: "info", title: "Sound Sure, Be Wrong", text: "AI can give long, fancy answers and sound 100% sure — and still be wrong! Big words and lots of detail don't mean the facts are right. Always verify important stuff.", emoji: "⚠️" },
@@ -412,4 +428,14 @@ export const masterIds = lessons.filter((l) => l.tier === "master").map((l) => l
 
 export function getLessonById(id: string): Lesson | undefined {
   return lessons.find((l) => l.id === id);
+}
+
+/** Lessons that belong to the given track, in display order (same as lessons array). */
+export function getLessonsForTrack(track: LearningTrack): Lesson[] {
+  return lessons.filter((l) => l.tracks?.includes(track) ?? false);
+}
+
+/** Ordered lesson IDs for the track (for unlock logic). */
+export function getOrderedLessonIdsForTrack(track: LearningTrack): string[] {
+  return getLessonsForTrack(track).map((l) => l.id);
 }

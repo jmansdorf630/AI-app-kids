@@ -6,4 +6,6 @@ export {
   explorerIds,
   masterIds,
   getLessonById,
+  getLessonsForTrack,
+  getOrderedLessonIdsForTrack,
 } from "./kids/lessons";

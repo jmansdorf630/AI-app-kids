@@ -13,6 +13,7 @@ interface LessonCardProps {
   state: LessonCardState;
   bestScore?: number;
   unlockRequirement?: string;
+  /** Optional: for XP pill color. Omit when using track-based list. */
   tier?: LearnTierKey;
 }
 
@@ -25,13 +26,16 @@ const XP_PILL_BY_TIER: Record<LearnTierKey, string> = {
     "font-bold text-amber-600 dark:text-amber-100 bg-amber-200/60 dark:bg-amber-800/40 border border-amber-400 dark:border-amber-600",
 };
 
-export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier = "beginner" }: LessonCardProps) {
+const XP_PILL_DEFAULT =
+  "font-bold text-amber-700 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-700";
+
+export function LessonCard({ lesson, state, bestScore, unlockRequirement, tier }: LessonCardProps) {
   const isLocked = state === "locked";
   const isNextUp = state === "nextUp";
   const isCompleted = state === "completed";
   const href = isLocked ? "#" : `/lesson/${lesson.id}`;
 
-  const xpPillClass = XP_PILL_BY_TIER[tier];
+  const xpPillClass = tier ? XP_PILL_BY_TIER[tier] : XP_PILL_DEFAULT;
   const baseCard =
     "block rounded-2xl border-2 p-4 shadow-sm transition text-left w-full " + focusRing;
 

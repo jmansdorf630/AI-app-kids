@@ -2,21 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getLessonById, lessons, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
-import { loadProgress, getIsLessonUnlocked } from "@/lib/progress";
+import { getLessonById, getOrderedLessonIdsForTrack } from "@/data/lessons";
+import { loadProgress } from "@/lib/progress";
+import { isLessonUnlockedForTrack } from "@/lib/trackHelpers";
 import type { ProgressState } from "@/types";
 import type { Lesson } from "@/types";
 import { LessonCompleteSummary } from "@/components/LessonCompleteSummary";
 import { PageSkeleton } from "@/components/PageSkeleton";
 
 function getNextLessonAfter(currentId: string, progress: ProgressState): Lesson | null {
-  const orderedIds = [...beginnerIds, ...explorerIds, ...masterIds];
+  const track = progress.settings?.learningTrack;
+  if (!track) return null;
+  const orderedIds = getOrderedLessonIdsForTrack(track);
   const idx = orderedIds.indexOf(currentId);
   if (idx < 0 || idx >= orderedIds.length - 1) return null;
   const nextId = orderedIds[idx + 1];
-  const next = lessons.find((l) => l.id === nextId);
+  const next = getLessonById(nextId);
   if (!next) return null;
-  const unlocked = getIsLessonUnlocked(next.id, next.tier, progress, beginnerIds, explorerIds, masterIds);
+  const unlocked = isLessonUnlockedForTrack(track, nextId, progress);
   return unlocked ? next : null;
 }
 

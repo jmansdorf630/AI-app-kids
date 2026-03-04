@@ -4,16 +4,16 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import confetti from "canvas-confetti";
-import { getLessonById, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
+import { getLessonById } from "@/data/lessons";
 import {
   loadProgress,
   saveProgress,
   completeLesson,
-  getIsLessonUnlocked,
   addSkillXp,
   updateWeeklyGoalOnLessonComplete,
   setLastLessonRun,
 } from "@/lib/progress";
+import { isLessonUnlockedForTrack } from "@/lib/trackHelpers";
 import { initSfx, playSfx } from "@/lib/sfx";
 import { vibrate } from "@/lib/haptics";
 import { shouldReduceMotion } from "@/lib/accessibility";
@@ -50,10 +50,13 @@ export default function LessonPage() {
     stepContentRef.current?.focus({ preventScroll: true });
   }, [stepIndex]);
 
+  const track = progress?.settings?.learningTrack;
   const unlocked =
     progress != null &&
     lesson != null &&
-    getIsLessonUnlocked(lesson.id, lesson.tier, progress, beginnerIds, explorerIds, masterIds);
+    track != null &&
+    lesson.tracks?.includes(track) &&
+    isLessonUnlockedForTrack(track, lesson.id, progress);
 
   const handleStepComplete = useCallback(
     (correct: boolean, fastBonus?: boolean) => {
@@ -160,10 +163,15 @@ export default function LessonPage() {
   }
 
   if (progress != null && !unlocked) {
+    const notInTrack = track && lesson && !lesson.tracks?.includes(track);
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600 dark:text-white">🔒 Complete the previous lesson or reach the required tier!</p>
-        <Link href="/learn" className="text-indigo-600 dark:text-indigo-400 font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
+        <p className="text-gray-600 dark:text-white">
+          {notInTrack
+            ? "This lesson isn't in your current learning track. Go to Learn to see your lessons."
+            : "🔒 Complete the previous lesson to unlock this one."}
+        </p>
+        <Link href="/learn" className="text-[var(--quest-primary)] font-semibold underline mt-2 inline-block focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900 rounded">
           Back to Learn
         </Link>
       </div>

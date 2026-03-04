@@ -52,6 +52,7 @@ function migrateState(parsed: ProgressState): ProgressState {
       theme: parsed.settings.theme ?? DEFAULT_SETTINGS.theme,
       largeText: parsed.settings.largeText ?? DEFAULT_SETTINGS.largeText,
       reduceMotion: parsed.settings.reduceMotion !== undefined ? parsed.settings.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
+      learningTrack: parsed.settings.learningTrack !== undefined ? parsed.settings.learningTrack : DEFAULT_SETTINGS.learningTrack ?? null,
     };
   }
   if (!parsed.weeklyGoal) parsed.weeklyGoal = createDefaultWeeklyGoal();

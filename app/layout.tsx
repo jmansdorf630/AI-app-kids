@@ -3,6 +3,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { ThemeAndAccessibilityInit } from "@/components/ThemeAndAccessibilityInit";
 import { OfflineBanner } from "@/components/OfflineBanner";
+import { OnboardingGate } from "@/components/OnboardingGate";
 
 export const metadata: Metadata = {
   title: "AI Quest – Learn AI the Fun Way!",
@@ -26,7 +27,7 @@ export default function RootLayout({
         <OfflineBanner />
         <Nav />
         <main className="max-w-2xl mx-auto px-4 pb-24 pt-6 sm:pt-8">
-          {children}
+          <OnboardingGate>{children}</OnboardingGate>
         </main>
       </body>
     </html>

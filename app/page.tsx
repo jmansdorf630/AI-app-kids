@@ -2,14 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { loadProgress, getIsLessonUnlocked } from "@/lib/progress";
-import type { ProgressState } from "@/types";
+import { loadProgress } from "@/lib/progress";
+import type { ProgressState, LearningTrack } from "@/types";
 import { levelFromXp, xpProgressInLevel, xpForNextLevel } from "@/types";
-import { lessons, beginnerIds, explorerIds, masterIds } from "@/data/lessons";
+import { getLessonsForTrack, getLessonById } from "@/data/lessons";
+import { getNextUpLessonIdForTrack } from "@/lib/trackHelpers";
 import { ProgressBar } from "@/components/ProgressBar";
 import { XPChip } from "@/components/XPChip";
 import { AvatarRenderer } from "@/components/avatar/AvatarRenderer";
 import { PageSkeleton } from "@/components/PageSkeleton";
+
+const TRACK_LABELS: Record<LearningTrack, string> = {
+  little_explorers: "Little Explorers",
+  ai_adventurers: "AI Adventurers",
+};
 
 const focusRing =
   "focus:outline-none focus:ring-2 focus:ring-[var(--quest-primary)] focus:ring-offset-2 dark:focus:ring-offset-slate-900";
@@ -25,8 +31,10 @@ export default function HomePage() {
     return <PageSkeleton />;
   }
 
-  const completedCount = Object.values(progress.lessons).filter((l) => l.completed).length;
-  const totalLessons = lessons.length;
+  const track = progress.settings?.learningTrack ?? "little_explorers";
+  const trackLessons = getLessonsForTrack(track);
+  const totalLessons = trackLessons.length;
+  const completedCount = trackLessons.filter((l) => progress.lessons[l.id]?.completed).length;
   const progressPct = totalLessons ? (completedCount / totalLessons) * 100 : 0;
   const level = levelFromXp(progress.totalXp);
   const levelProgress = xpProgressInLevel(progress.totalXp);
@@ -38,13 +46,9 @@ export default function HomePage() {
   const weeklyComplete = weeklyTarget > 0 && weekly.completedLessons >= weekly.targetLessons;
   const weeklyRemaining = Math.max(0, weeklyTarget - weekly.completedLessons);
 
-  const orderedIds = [...beginnerIds, ...explorerIds, ...masterIds];
-  const nextLesson = orderedIds
-    .map((id) => lessons.find((l) => l.id === id))
-    .find((l) => l && !progress.lessons[l.id]?.completed);
-  const nextUnlocked =
-    nextLesson &&
-    getIsLessonUnlocked(nextLesson.id, nextLesson.tier, progress, beginnerIds, explorerIds, masterIds);
+  const nextLessonId = getNextUpLessonIdForTrack(progress, track);
+  const nextLesson = nextLessonId ? getLessonById(nextLessonId) : null;
+  const nextUnlocked = !!nextLesson;
 
   const earnedBadges = progress.badges.filter((b) => b.earnedAt);
   const mostRecentBadge = earnedBadges.length > 0
@@ -62,6 +66,11 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6">
+      {/* Track label */}
+      <p className="text-sm font-semibold text-[var(--quest-primary)] text-center">
+        {TRACK_LABELS[track]} (ages {track === "little_explorers" ? "6–8" : "9–10"})
+      </p>
+
       {/* Hero: avatar as focus, personalized copy, compact stats */}
       <section className="text-center">
         <div className="avatar-stage inline-block mb-3">
@@ -114,7 +123,7 @@ export default function HomePage() {
         <section className="rounded-2xl border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-5 shadow-md">
           <h2 className="font-bold text-lg text-gray-800 dark:text-gray-100 mb-1">Next up</h2>
           <p className="text-amber-800 dark:text-amber-200 mb-4">
-            Complete the previous lesson or reach the next tier to unlock.
+            Complete the previous lesson to unlock the next one.
           </p>
           <Link
             href="/learn"

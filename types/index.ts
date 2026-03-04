@@ -20,6 +20,9 @@ export type SkillTag =
 
 export type LessonTier = "beginner" | "explorer" | "master";
 
+/** Age-based learning track. Little Explorers (6–8), AI Adventurers (9–10). */
+export type LearningTrack = "little_explorers" | "ai_adventurers";
+
 export interface BaseStep {
   id: string;
   type: StepType;
@@ -127,6 +130,8 @@ export interface Lesson {
   description: string;
   emoji: string;
   tier: LessonTier;
+  /** Which age-based tracks include this lesson. Used to filter on Learn page. */
+  tracks: LearningTrack[];
   xpReward: number;
   steps: Step[];
   badgeId?: string;
@@ -186,6 +191,8 @@ export interface ProgressSettings {
   largeText: boolean;
   /** When undefined, respect prefers-reduced-motion; when true/false, user override. */
   reduceMotion?: boolean;
+  /** Age-based learning track. null = not set yet (onboarding needed). */
+  learningTrack?: LearningTrack | null;
 }
 
 export interface WeeklyGoalState {
@@ -294,6 +301,7 @@ export const DEFAULT_SETTINGS: ProgressSettings = {
   hapticsEnabled: true,
   largeText: false,
   reduceMotion: undefined, /* respect OS prefers-reduced-motion when undefined */
+  learningTrack: null, /* set during onboarding or in Settings */
 };
 
 export function getWeekStartISO(date: Date = new Date()): string {
